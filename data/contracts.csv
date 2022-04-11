@@ -1,0 +1,391 @@
+category,categoryRank,lastName,fullName,position,term,signAge,contractLength,totalValue,aav,signBonus
+entry-level,1,Cunningham,Cade Cunningham,Point Guard,2021-2024 (FA: 2025),19,4,"$45,599,089","$11,399,772",$0
+entry-level,2,Edwards,Anthony Edwards,Shooting Guard,2020-2023 (FA: 2024),19,4,"$44,271,137","$11,067,784",$0
+entry-level,2,Williamson,Zion Williamson,Power Forward,2019-2022 (FA: 2023),18,4,"$44,271,137","$11,067,784",$0
+entry-level,4,Green,Jalen Green,Shooting Guard,2021-2024 (FA: 2025),19,4,"$40,808,448","$10,202,112",$0
+entry-level,5,Ayton,Deandre Ayton,Center,2018-2021 (FA: 2022),19,4,"$40,379,230","$10,094,808",$0
+entry-level,6,Morant,Ja Morant,Point Guard,2019-2022 (FA: 2023),19,4,"$39,619,840","$9,904,960",$0
+entry-level,6,Wiseman,James Wiseman,Center,2020-2023 (FA: 2024),19,4,"$39,619,840","$9,904,960",$0
+entry-level,8,Mobley,Evan Mobley,Center,2021-2024 (FA: 2025),20,4,"$36,664,177","$9,166,044",$0
+entry-level,9,Bagley III,Marvin Bagley III,Power Forward,2018-2021 (FA: 2022),19,4,"$36,137,474","$9,034,369",$0
+entry-level,10,Ball,LaMelo Ball,Point Guard,2020-2023 (FA: 2024),19,4,"$35,596,275","$8,899,069",$0
+entry-level,10,Barrett,R.J. Barrett,Shooting Guard,2019-2022 (FA: 2023),19,4,"$35,596,275","$8,899,069",$0
+entry-level,12,Barnes,Scottie Barnes,Small Forward,2021-2024 (FA: 2025),20,4,"$33,064,660","$8,266,165",$0
+entry-level,13,Doncic,Luka Doncic,Point Guard,2018-2021 (FA: 2022),19,4,"$32,467,751","$8,116,938",$0
+entry-level,14,Hunter,De'Andre Hunter,Small Forward,2019-2022 (FA: 2023),21,4,"$32,101,641","$8,025,410",$0
+entry-level,14,Williams,Patrick Williams,Small Forward,2020-2023 (FA: 2024),19,4,"$32,101,641","$8,025,410",$0
+entry-level,16,Suggs,Jalen Suggs,Shooting Guard,2021-2024 (FA: 2025),20,4,"$29,955,705","$7,488,926",$0
+entry-level,17,Jackson Jr.,Jaren Jackson Jr.,Power Forward,2018-2021 (FA: 0),18,4,"$29,280,440","$7,320,110",$0
+entry-level,18,Garland,Darius Garland,Point Guard,2019-2022 (FA: 2023),19,4,"$29,083,315","$7,270,829",$0
+entry-level,18,Okoro,Isaac Okoro,Shooting Guard,2020-2023 (FA: 2024),19,4,"$29,083,315","$7,270,829",$0
+entry-level,20,Giddey,Josh Giddey,Shooting Guard,2021-2024 (FA: 2025),18,4,"$27,214,807","$6,803,702",$0
+entry-level,21,Young,Trae Young,Point Guard,2018-2021 (FA: 2022),19,4,"$26,527,711","$6,631,928",$0
+entry-level,22,Culver,Jarrett Culver,Shooting Guard,2019-2022 (FA: 2022),20,4,"$26,422,143","$6,605,536",$0
+entry-level,22,Okongwu,Onyeka Okongwu,Power Forward,2020-2023 (FA: 2024),19,4,"$26,422,143","$6,605,536",$0
+entry-level,24,Kuminga,Jonathan Kuminga,Power Forward,2021-2024 (FA: 2025),18,4,"$24,855,347","$6,213,837",$0
+entry-level,25,White,Coby White,Point Guard,2019-2022 (FA: 2023),19,4,"$24,131,515","$6,032,879",$0
+entry-level,25,Hayes,Killian Hayes,Point Guard,2020-2021 (FA: 2024),19,4,"$24,131,515","$6,032,879",$0
+entry-level,27,Bamba,Mohamed Bamba,Center,2018-2021 (FA: 2021),20,4,"$24,100,423","$6,025,106",$0
+entry-level,28,Wagner,Franz Wagner,Small Forward,2021-2024 (FA: 2025),19,4,"$22,781,932","$5,695,483",$0
+entry-level,29,Hayes,Jaxson Hayes,Center,2019-2022 (FA: 2023),19,4,"$22,118,492","$5,529,623",$0
+entry-level,29,Toppin,Obi Toppin,Power Forward,2020-2023 (FA: 2024),22,4,"$22,118,492","$5,529,623",$0
+entry-level,31,Carter Jr.,Wendell Carter Jr.,Center,2018-2021 (FA: 2022),19,4,"$22,011,467","$5,502,867",$0
+entry-level,32,Mitchell,Davion Mitchell,Point Guard,2021-2024 (FA: 2025),22,4,"$20,951,517","$5,237,879",$0
+entry-level,33,Hachimura,Rui Hachimura,Power Forward,2019-2022 (FA: 2023),21,4,"$20,341,348","$5,085,337",$0
+entry-level,33,Avdija,Deni Avdija,Small Forward,2020-2021 (FA: 2024),19,4,"$20,341,348","$5,085,337",$0
+entry-level,35,Sexton,Collin Sexton,Point Guard,2018-2021 (FA: 2022),19,4,"$20,175,111","$5,043,778",$0
+entry-level,36,Williams,Ziaire Williams,Shooting Guard,2021-2024 (FA: 2025),19,4,"$19,907,925","$4,976,981",$0
+entry-level,37,Reddish,Cam Reddish,Small Forward,2019-2022 (FA: 2023),19,4,"$19,328,334","$4,832,084",$0
+entry-level,37,Smith,Jalen Smith,Power Forward,2020-2023 (FA: 2022),20,4,"$19,328,334","$4,832,084",$0
+entry-level,39,Bouknight,James Bouknight,Shooting Guard,2021-2024 (FA: 2025),20,4,"$19,151,217","$4,787,804",$0
+entry-level,40,Vassell,Devin Vassell,Shooting Guard,2020-2023 (FA: 2024),20,4,"$18,593,499","$4,648,375",$0
+entry-level,40,Johnson,Cameron Johnson,Small Forward,2019-2022 (FA: 2023),23,4,"$18,593,499","$4,648,375",$0
+entry-level,42,Knox,Kevin Knox,Small Forward,2018-2021 (FA: 2022),18,4,"$18,554,698","$4,638,675",$0
+entry-level,43,Primo,Joshua Primo,Shooting Guard,2021-2024 (FA: 2025),18,4,"$18,415,445","$4,603,861",$0
+entry-level,44,Haliburton,Tyrese Haliburton,Point Guard,2020-2023 (FA: 2024),20,4,"$17,878,995","$4,469,749",$0
+entry-level,45,Duarte,Chris Duarte,Shooting Guard,2021-2024 (FA: 2025),24,4,"$17,704,528","$4,426,132",$0
+entry-level,46,Bridges,Mikal Bridges,Small Forward,2018-2021 (FA: 2022),21,4,"$17,630,685","$4,407,671",$0
+entry-level,47,Herro,Tyler Herro,Shooting Guard,2019-2022 (FA: 2023),19,4,"$17,188,836","$4,297,209",$0
+entry-level,47,Lewis Jr.,Kira Lewis Jr.,Point Guard,2020-2023 (FA: 2024),19,4,"$17,188,836","$4,297,209",$0
+entry-level,49,Moody,Moses Moody,Shooting Guard,2021-2024 (FA: 2025),19,4,"$17,024,109","$4,256,027",$0
+entry-level,50,Gilgeous-Alexander,Shai Gilgeous-Alexander,Point Guard,2018-2021 (FA: 2022),19,4,"$16,965,132","$4,241,283",$0
+entry-level,51,Langford,Romeo Langford,Shooting Guard,2019-2022 (FA: 2023),19,4,"$16,528,217","$4,132,054",$0
+entry-level,51,Nesmith,Aaron Nesmith,Small Forward,2020-2023 (FA: 2024),21,4,"$16,528,217","$4,132,054",$0
+entry-level,53,Kispert,Corey Kispert,Small Forward,2021-2022 (FA: 2025),21,4,"$16,364,408","$4,091,102",$0
+entry-level,54,Bridges,Miles Bridges,Small Forward,2018-2021 (FA: 2022),20,4,"$16,317,853","$4,079,463",$0
+entry-level,55,Anthony,Cole Anthony,Point Guard,2020-2023 (FA: 2024),20,4,"$15,887,971","$3,971,993",$0
+entry-level,56,Sengun,Alperen Sengun,Center,2021-2024 (FA: 2025),19,4,"$15,550,974","$3,887,744",$0
+entry-level,57,Okeke,Chuma Okeke,Power Forward,2020-2023 (FA: 2024),22,4,"$15,098,193","$3,774,548",$0
+entry-level,57,Stewart,Isaiah Stewart,Center,2020-2023 (FA: 2024),19,4,"$15,098,193","$3,774,548",$0
+entry-level,59,Porter Jr.,Michael Porter Jr.,Small Forward,2018-2021 (FA: 0),20,4,"$15,093,095","$3,773,274",$0
+entry-level,60,Murphy III,Trey Murphy III,Shooting Guard,2021-2024 (FA: 2025),21,4,"$14,779,415","$3,694,854",$0
+entry-level,61,Brown Jr.,Troy Brown Jr.,Small Forward,2018-2021 (FA: 2022),18,4,"$14,511,964","$3,627,991",$0
+entry-level,62,Alexander-Walker,Nickeil Alexander-Walker,Shooting Guard,2019-2022 (FA: 2023),20,4,"$14,349,113","$3,587,278",$0
+entry-level,62,Pokusevski,Aleksej Pokusevski,Power Forward,2020-2023 (FA: 2024),18,4,"$14,349,113","$3,587,278",$0
+entry-level,64,Mann,Tre Mann,Point Guard,2021-2024 (FA: 2025),20,4,"$14,047,213","$3,511,803",$0
+entry-level,65,Green,Josh Green,Shooting Guard,2020-2023 (FA: 2024),20,4,"$13,638,019","$3,409,505",$0
+entry-level,65,Bitadze,Goga Bitadze,Center,2019-2022 (FA: 2023),19,4,"$13,638,019","$3,409,505",$0
+entry-level,67,Jones,Kai Jones,Power Forward,2021-2024 (FA: 2025),0,4,"$13,421,215","$3,355,304",$0
+entry-level,68,DiVincenzo,Donte DiVincenzo,Shooting Guard,2018-2021 (FA: 2022),21,4,"$13,106,790","$3,276,698",$0
+entry-level,69,Bey,Saddiq Bey,Shooting Guard,2020-2021 (FA: 2024),21,4,"$13,030,303","$3,257,576",$0
+entry-level,70,Johnson,Jalen Johnson,Small Forward,2021-2024 (FA: 2025),19,4,"$12,888,585","$3,222,146",$0
+entry-level,71,Johnson,Keon Johnson,Shooting Guard,2021-2024 (FA: 2025),19,4,"$12,517,291","$3,129,323",$0
+entry-level,72,Thybulle,Matisse Thybulle,Shooting Guard,2019-2022 (FA: 2023),22,4,"$12,513,127","$3,128,282",$0
+entry-level,72,Achiuwa,Precious Achiuwa,Power Forward,2020-2023 (FA: 2024),21,4,"$12,513,127","$3,128,282",$0
+entry-level,74,Walker IV,Lonnie Walker IV,Shooting Guard,2018-2021 (FA: 2022),19,4,"$12,457,536","$3,114,384",$0
+entry-level,75,Jackson,Isaiah Jackson,Power Forward,2021-2024 (FA: 2025),19,4,"$12,156,661","$3,039,165",$0
+entry-level,76,Maxey,Tyrese Maxey,Point Guard,2020-2023 (FA: 2024),20,4,"$12,152,560","$3,038,140",$0
+entry-level,76,Clarke,Brandon Clarke,Small Forward,2019-2022 (FA: 2023),22,4,"$12,152,560","$3,038,140",$0
+entry-level,78,Washington,PJ Washington,Power Forward,2019-2022 (FA: 2023),20,4,"$12,070,560","$3,017,640",$0
+entry-level,79,Huerter,Kevin Huerter,Shooting Guard,2018-2021 (FA: 0),19,4,"$11,902,517","$2,975,629",$0
+entry-level,80,Bolmaro,Leandro Bolmaro,Shooting Guard,2021-2024 (FA: 2025),21,4,"$11,805,395","$2,951,349",$0
+entry-level,80,Garuba,Usman Garuba,Power Forward,2021-2024 (FA: 2025),19,4,"$11,805,395","$2,951,349",$0
+entry-level,82,Williams,Grant Williams,Power Forward,2019-2022 (FA: 2023),20,4,"$11,802,681","$2,950,670",$0
+entry-level,82,Nnaji,Zeke Nnaji,Power Forward,2020-2021 (FA: 2024),19,4,"$11,802,681","$2,950,670",$0
+entry-level,84,Christopher,Josh Christopher,Shooting Guard,2021-2024 (FA: 2025),19,4,"$11,463,215","$2,865,804",$0
+entry-level,85,Bazley,Darius Bazley,Small Forward,2019-2022 (FA: 2023),19,4,"$11,461,629","$2,865,407",$0
+entry-level,86,Okogie,Josh Okogie,Small Forward,2018-2021 (FA: 2022),19,4,"$11,430,344","$2,857,586",$0
+entry-level,87,Hampton,RJ Hampton,Point Guard,2020-2021 (FA: 2024),19,4,"$11,129,417","$2,782,354",$0
+entry-level,87,Jerome,Ty Jerome,Point Guard,2019-2022 (FA: 2023),21,4,"$11,129,417","$2,782,354",$0
+entry-level,89,Grimes,Quentin Grimes,Shooting Guard,2021-2024 (FA: 2025),21,4,"$11,128,042","$2,782,011",$0
+entry-level,90,Little,Nassir Little,Small Forward,2019-2022 (FA: 2023),19,4,"$10,803,948","$2,700,987",$0
+entry-level,90,Quickley,Immanuel Quickley,Shooting Guard,2020-2021 (FA: 2024),21,4,"$10,803,948","$2,700,987",$0
+entry-level,92,Hyland,Nah'Shon Hyland,Point Guard,2021-2024 (FA: 2025),20,4,"$10,763,240","$2,690,810",$0
+entry-level,93,Holiday,Aaron Holiday,Point Guard,2018-2021 (FA: 2022),21,4,"$10,477,351","$2,619,338",$0
+entry-level,94,Thomas,Cameron Thomas,Shooting Guard,2021-2022 (FA: 2025),19,4,"$10,455,849","$2,613,962",$0
+entry-level,95,Windler,Dylan Windler,Shooting Guard,2019-2022 (FA: 2023),22,4,"$10,449,718","$2,612,430",$0
+entry-level,95,Pritchard,Payton Pritchard,Point Guard,2020-2023 (FA: 2024),22,4,"$10,449,718","$2,612,430",$0
+entry-level,97,Springer,Jaden Springer,Point Guard,2021-2024 (FA: 2025),18,4,"$10,393,483","$2,598,371",$0
+entry-level,98,Sharpe,Day'Ron Sharpe,Center,2021-2024 (FA: 2025),19,4,"$10,317,802","$2,579,451",$0
+entry-level,99,Aldama,Santi Aldama,Power Forward,2021-2024 (FA: 2025),20,4,"$10,243,371","$2,560,843",$0
+entry-level,100,Simons,Anfernee Simons,Shooting Guard,2018-2021 (FA: 2022),19,4,"$10,175,938","$2,543,985",$0
+entry-level,101,Azubuike,Udoka Azubuike,Center,2020-2023 (FA: 2024),21,4,"$10,151,244","$2,537,811",$0
+entry-level,102,McDaniels,Jaden McDaniels,Power Forward,2020-2023 (FA: 2024),20,4,"$10,090,879","$2,522,720",$0
+entry-level,102,Poole,Jordan Poole,Shooting Guard,2019-2022 (FA: 2023),20,4,"$10,090,879","$2,522,720",$0
+entry-level,104,Johnson,Keldon Johnson,Shooting Guard,2019-2022 (FA: 2023),19,4,"$10,017,385","$2,504,346",$0
+entry-level,104,Flynn,Malachi Flynn,Point Guard,2020-2021 (FA: 2024),22,4,"$10,017,385","$2,504,346",$0
+entry-level,106,Bane,Desmond Bane,Shooting Guard,2020-2023 (FA: 2024),22,4,"$9,944,923","$2,486,231",$0
+entry-level,107,Shamet,Landry Shamet,Point Guard,2018-2021 (FA: 0),21,4,"$9,557,142","$2,389,286",$0
+entry-level,108,Williams III,Robert Williams III,Center,2018-2021 (FA: 2022),20,4,"$9,283,856","$2,320,964",$0
+entry-level,109,Porter Jr.,Kevin Porter Jr.,Shooting Guard,2019-2022 (FA: 2023),19,4,"$8,009,193","$2,002,298",$0
+entry-level,110,Robinson-Earl,Jeremiah Robinson-Earl,Power Forward,2021-2024 (FA: 2025),20,4,"$7,888,598","$1,972,150",$0
+entry-level,111,Allen,Grayson Allen,Shooting Guard,2018-2021 (FA: 0),22,4,"$7,049,040","$1,762,260",$0
+entry-level,112,Todd,Isaiah Todd,Power Forward,2021-2024 (FA: 2025),19,4,"$6,888,212","$1,722,053",$0
+entry-level,113,Thor,JT Thor,Power Forward,2021-2024 (FA: 2025),18,4,"$6,638,212","$1,659,553",$0
+entry-level,114,Carey Jr.,Vernon Carey Jr.,Center,2020-2022 (FA: 2024),19,3,"$6,581,283","$2,193,761",$0
+entry-level,115,Krejci,Vit Krejci,Point Guard,2021-2024 (FA: 2025),21,4,"$6,313,470","$1,578,368",$0
+entry-level,116,Gafford,Daniel Gafford,Power Forward,2019-2022 (FA: 0),20,4,"$6,129,593","$1,532,398",$0
+entry-level,117,Brunson,Jalen Brunson,Point Guard,2018-2021 (FA: 2022),21,4,"$6,112,770","$1,528,193",$0
+entry-level,118,Maledon,Theo Maledon,Point Guard,2020-2022 (FA: 2024),19,3,"$5,900,000","$1,966,667",$0
+entry-level,119,Jones,Herbert Jones,Small Forward,2021-2023 (FA: 2024),22,3,"$5,321,096","$1,773,699",$0
+entry-level,120,Roby,Isaiah Roby,Small Forward,2019-2021 (FA: 2023),21,3,"$4,800,602","$1,600,201",$0
+entry-level,121,Robinson,Mitchell Robinson,Center,2018-2020 (FA: 2022),19,3,"$4,709,013","$1,569,671",$0
+entry-level,122,Fernando,Bruno Fernando,Power Forward,2019-2021 (FA: 2022),20,3,"$4,700,602","$1,566,867",$0
+entry-level,122,Nowell,Jaylen Nowell,Shooting Guard,2019-2021 (FA: 2023),19,4,"$4,700,602","$1,175,151",$0
+entry-level,124,Tillman,Xavier Tillman,Power Forward,2020-2022 (FA: 2024),21,3,"$4,600,602","$1,533,534",$0
+entry-level,125,Martin,Cody Martin,Small Forward,2019-2021 (FA: 2022),23,3,"$4,473,912","$1,491,304",$0
+entry-level,126,Preston,Jason Preston,Point Guard,2021-2023 (FA: 2024),21,3,"$4,461,917","$1,487,306",$0
+entry-level,127,Livers,Isaiah Livers,Power Forward,2021-2023 (FA: 2024),23,3,"$4,456,874","$1,485,625",$0
+entry-level,128,McBride,Miles McBride,Point Guard,2021-2023 (FA: 2024),20,3,"$4,324,872","$1,441,624",$0
+entry-level,128,Bassey,Charles Bassey,Center,2021-2023 (FA: 2024),20,3,"$4,324,872","$1,441,624",$0
+entry-level,128,Boston Jr,Brandon Boston Jr,Shooting Guard,2021-2023 (FA: 2024),19,3,"$4,324,872","$1,441,624",$0
+entry-level,128,Simonovic,Marko Simonovic,Center,2021-2023 (FA: 2024),21,3,"$4,324,872","$1,441,624",$0
+entry-level,128,Brown III,Greg Brown III,Power Forward,2021-2023 (FA: 2024),19,3,"$4,324,872","$1,441,624",$0
+entry-level,133,Mann,Terance Mann,Shooting Guard,2019-2021 (FA: 2023),22,3,"$4,300,602","$1,433,534",$0
+entry-level,133,Richards,Nick Richards,Center,2020-2022 (FA: 2023),23,3,"$4,300,602","$1,433,534",$0
+entry-level,135,Claxton,Nicolas Claxton,Power Forward,2019-2021 (FA: 2022),20,3,"$4,198,912","$1,399,637",$0
+entry-level,135,Jones,Tre Jones,Point Guard,2020-2022 (FA: 2023),20,3,"$4,198,912","$1,399,637",$0
+entry-level,135,Joe,Isaiah Joe,Shooting Guard,2020-2022 (FA: 2023),21,3,"$4,198,912","$1,399,637",$0
+entry-level,135,Martin Jr.,Kenyon Martin Jr.,Small Forward,2020-2022 (FA: 2024),18,3,"$4,198,912","$1,399,637",$0
+entry-level,135,Paschall,Eric Paschall,Power Forward,2019-2021 (FA: 2022),22,3,"$4,198,912","$1,399,637",$0
+entry-level,140,Butler,Jared Butler,Point Guard,2021-2022 (FA: 2023),20,2,"$2,488,776","$1,244,388",$0
+entry-level,140,Dosunmu,Ayo Dosunmu,Shooting Guard,2021-2022 (FA: 2023),21,2,"$2,488,776","$1,244,388",$0
+entry-level,142,Banton,Dalano Banton,Point Guard,2021-2022 (FA: 2023),21,2,"$2,488,775","$1,244,388",$0
+entry-level,143,Nwora,Jordan Nwora,Power Forward,2020-2021 (FA: 2022),22,2,"$2,416,291","$1,208,146",$0
+entry-level,143,Elleby,CJ Elleby,Small Forward,2020-2021 (FA: 2022),20,2,"$2,416,291","$1,208,146",$0
+rookie-extension,1,Brown,Jaylen Brown,Shooting Guard,2020-2023 (FA: 2024),22,4,"$106,333,334","$26,583,334",$0
+rookie-extension,2,Jackson Jr.,Jaren Jackson Jr.,Power Forward,2022-2025 (FA: 2026),22,4,"$104,720,000","$26,180,000",$0
+rookie-extension,3,Hield,Buddy Hield,Shooting Guard,2020-2023 (FA: 2024),26,4,"$94,000,000","$23,500,000",$0
+rookie-extension,4,Bridges,Mikal Bridges,Small Forward,2022-2025 (FA: 2026),25,4,"$90,900,000","$22,725,000",$0
+rookie-extension,5,Harris,Gary Harris,Shooting Guard,2018-2021 (FA: 2022),23,4,"$84,000,000","$21,000,000",$0
+rookie-extension,6,Turner,Myles Turner,Center,2019-2022 (FA: 2023),22,4,"$80,000,000","$20,000,000",$0
+rookie-extension,7,Sabonis,Domantas Sabonis,Power Forward,2020-2023 (FA: 2024),23,4,"$74,900,000","$18,725,000",$0
+rookie-extension,8,Anunoby,OG Anunoby,Small Forward,2021-2024 (FA: 2025),23,4,"$72,000,000","$18,000,000",$0
+rookie-extension,9,White,Derrick White,Point Guard,2021-2024 (FA: 2025),26,4,"$70,000,000","$17,500,000",$0
+rookie-extension,10,Isaac,Jonathan Isaac,Power Forward,2021-2024 (FA: 2025),23,4,"$69,600,000","$17,400,000",$0
+rookie-extension,11,Huerter,Kevin Huerter,Shooting Guard,2022-2025 (FA: 2026),23,4,"$65,000,000","$16,250,000",$0
+rookie-extension,12,Murray,Dejounte Murray,Point Guard,2020-2023 (FA: 2024),23,4,"$64,000,000","$16,000,000",$0
+rookie-extension,13,Kennard,Luke Kennard,Shooting Guard,2021-2024 (FA: 2025),24,4,"$56,000,000","$14,000,000",$0
+rookie-extension,14,LeVert,Caris LeVert,Shooting Guard,2020-2022 (FA: 2023),24,3,"$52,500,000","$17,500,000",$0
+rookie-extension,15,Carter Jr.,Wendell Carter Jr.,Center,2022-2025 (FA: 2026),22,4,"$50,000,000","$12,500,000",$0
+rookie-extension,15,Fultz,Markelle Fultz,Point Guard,2021-2023 (FA: 2024),22,3,"$50,000,000","$16,666,667",$0
+rookie-extension,17,Williams III,Robert Williams III,Center,2022-2025 (FA: 2026),23,4,"$48,000,000","$12,000,000",$0
+rookie-extension,18,Warren,T.J. Warren,Small Forward,2018-2021 (FA: 2022),24,4,"$47,000,000","$11,750,000",$0
+rookie-extension,19,Nance Jr.,Larry Nance Jr.,Power Forward,2019-2022 (FA: 2023),25,4,"$44,800,000","$11,200,000",$0
+rookie-extension,20,Shamet,Landry Shamet,Point Guard,2022-2025 (FA: 2026),24,4,"$42,500,000","$10,625,000",$0
+rookie-extension,21,Kuzma,Kyle Kuzma,Power Forward,2021-2023 (FA: 2024),25,3,"$39,000,000","$13,000,000",$0
+rookie-extension,22,Brooks,Dillon Brooks,Shooting Guard,2020-2022 (FA: 2023),24,3,"$35,000,000","$11,666,667",$0
+rookie-extension,23,Prince,Taurean Prince,Power Forward,2020-2021 (FA: 2022),25,2,"$25,250,000","$12,625,000",$0
+rookie-extension,24,Allen,Grayson Allen,Shooting Guard,2022-2023 (FA: 2024),26,2,"$18,700,000","$9,350,000",$0
+rookie-maximum-extension,1,Simmons,Ben Simmons,Point Guard,2020-2024 (FA: 2025),22,5,"$177,243,360","$35,448,672",$0
+rookie-maximum-extension,2,Gilgeous-Alexander,Shai Gilgeous-Alexander,Point Guard,2022-2026 (FA: 2027),23,5,"$172,550,000","$34,510,000",$0
+rookie-maximum-extension,2,Young,Trae Young,Point Guard,2022-2026 (FA: 2027),22,5,"$172,550,000","$34,510,000",$0
+rookie-maximum-extension,2,Porter Jr.,Michael Porter Jr.,Small Forward,2022-2026 (FA: 2027),23,5,"$172,550,000","$34,510,000",$0
+rookie-maximum-extension,5,Fox,De'Aaron Fox,Point Guard,2021-2025 (FA: 2026),22,5,"$163,000,300","$32,600,060",$0
+rookie-maximum-extension,5,Mitchell,Donovan Mitchell,Shooting Guard,2021-2025 (FA: 2026),24,5,"$163,000,300","$32,600,060",$0
+rookie-maximum-extension,5,Adebayo,Bam Adebayo,Power Forward,2021-2025 (FA: 2026),23,5,"$163,000,300","$32,600,060",$0
+rookie-maximum-extension,5,Tatum,Jayson Tatum,Power Forward,2021-2025 (FA: 2026),22,5,"$163,000,300","$32,600,060",$0
+rookie-maximum-extension,9,Towns,Karl-Anthony Towns,Center,2019-2023 (FA: 2024),22,5,"$158,253,000","$31,650,600",$0
+rookie-maximum-extension,9,Booker,Devin Booker,Shooting Guard,2019-2023 (FA: 2024),21,5,"$158,253,000","$31,650,600",$0
+rookie-maximum-extension,9,Murray,Jamal Murray,Point Guard,2020-2024 (FA: 2025),22,5,"$158,253,000","$31,650,600",$0
+rookie-maximum-extension,12,Wiggins,Andrew Wiggins,Small Forward,2018-2022 (FA: 2023),22,5,"$147,710,050","$29,542,010",$0
+rookie-maximum-extension,12,Embiid,Joel Embiid,Center,2018-2022 (FA: 2023),23,5,"$147,710,050","$29,542,010",$0
+rookie-maximum-extension,14,Siakam,Pascal Siakam,Power Forward,2020-2023 (FA: 2024),25,4,"$136,905,216","$34,226,304",$0
+designated-rookie-extension,1,Doncic,Luka Doncic,Point Guard,2022-2026 (FA: 2027),22,5,"$207,060,000","$41,412,000",$0
+veteran-extension,1,Curry,Stephen Curry,Point Guard,2022-2025 (FA: 2026),33,4,"$215,353,664","$53,838,416",$0
+veteran-extension,2,Gobert,Rudy Gobert,Center,2021-2025 (FA: 2026),28,5,"$205,000,002","$41,000,000",$0
+veteran-extension,3,Butler,Jimmy Butler,Small Forward,2023-2025 (FA: 2026),31,3,"$146,396,031","$48,798,677",$0
+veteran-extension,4,Holiday,Jrue Holiday,Shooting Guard,2021-2024 (FA: 2025),30,4,"$134,997,333","$33,749,333",$0
+veteran-extension,5,Love,Kevin Love,Power Forward,2019-2022 (FA: 2023),29,4,"$120,402,172","$30,100,543",$0
+veteran-extension,6,Randle,Julius Randle,Power Forward,2022-2025 (FA: 2026),26,4,"$117,089,280","$29,272,320",$0
+veteran-extension,7,McCollum,C.J. McCollum,Shooting Guard,2021-2023 (FA: 2024),27,3,"$100,000,000","$33,333,333",$0
+veteran-extension,8,Green,Draymond Green,Power Forward,2020-2023 (FA: 2024),29,4,"$99,666,362","$24,916,591",$0
+veteran-extension,9,Rozier,Terry Rozier,Point Guard,2022-2025 (FA: 2026),27,4,"$96,258,694","$24,064,674",$0
+veteran-extension,10,Gordon,Aaron Gordon,Power Forward,2022-2025 (FA: 2026),26,4,"$86,640,001","$21,660,000",$0
+veteran-extension,11,Smart,Marcus Smart,Point Guard,2022-2025 (FA: 2026),27,4,"$76,487,996","$19,121,999",$0
+veteran-extension,12,Gordon,Eric Gordon,Shooting Guard,2020-2023 (FA: 2024),30,4,"$75,574,356","$18,893,589",$0
+veteran-extension,13,Beal,Bradley Beal,Shooting Guard,2021-2022 (FA: 2023),26,2,"$70,146,336","$35,073,168",$0
+veteran-extension,14,Bledsoe,Eric Bledsoe,Point Guard,2019-2022 (FA: 2023),29,4,"$70,000,000","$17,500,000",$0
+veteran-extension,15,Finney-Smith,Dorian Finney-Smith,Small Forward,2022-2025 (FA: 2026),28,4,"$55,560,960","$13,890,240",$0
+veteran-extension,16,Covington,Robert Covington,Power Forward,2018-2021 (FA: 2022),27,4,"$46,879,127","$11,719,782",$0
+veteran-extension,17,Capela,Clint Capela,Center,2023-2024 (FA: 2025),27,2,"$45,881,280","$22,940,640",$0
+veteran-extension,18,Brogdon,Malcolm Brogdon,Point Guard,2023-2024 (FA: 2025),28,2,"$45,000,000","$22,500,000",$0
+veteran-extension,19,Richardson,Josh Richardson,Shooting Guard,2018-2021 (FA: 0),24,4,"$41,965,056","$10,491,264",$0
+veteran-extension,20,Gafford,Daniel Gafford,Power Forward,2023-2025 (FA: 2026),23,3,"$40,182,480","$13,394,160",$0
+veteran-extension,21,O'Neale,Royce O'Neale,Small Forward,2020-2023 (FA: 2024),26,4,"$36,000,000","$9,000,000",$0
+veteran-extension,22,Powell,Dwight Powell,Center,2020-2022 (FA: 2023),27,3,"$33,240,375","$11,080,125",$0
+veteran-extension,23,Osman,Cedi Osman,Small Forward,2020-2023 (FA: 2024),24,4,"$31,118,844","$7,779,711",$0
+veteran-extension,24,Valanciunas,Jonas Valanciunas,Center,2022-2023 (FA: 2024),29,2,"$30,135,000","$15,067,500",$0
+veteran-extension,25,Morris,Monte Morris,Point Guard,2021-2023 (FA: 2024),25,3,"$27,774,997","$9,258,332",$0
+veteran-extension,26,Mann,Terance Mann,Shooting Guard,2023-2024 (FA: 2025),24,2,"$22,000,000","$11,000,000",$0
+veteran-extension,27,Ingles,Joe Ingles,Small Forward,2021-2021 (FA: 2022),33,1,"$13,036,364","$13,036,364",$0
+veteran-extension,28,Beverley,Patrick Beverley,Point Guard,2022-2022 (FA: 2023),33,1,"$13,000,000","$13,000,000",$0
+veteran-extension,29,Richardson,Josh Richardson,Shooting Guard,2022-2022 (FA: 2023),27,1,"$12,196,094","$12,196,094",$0
+designated-player-veteran-extension,1,Antetokounmpo,Giannis Antetokounmpo,Power Forward,2021-2025 (FA: 2026),26,5,"$228,200,420","$45,640,084",$0
+designated-player-veteran-extension,2,Westbrook,Russell Westbrook,Point Guard,2018-2022 (FA: 2023),28,5,"$206,794,070","$41,358,814",$0
+designated-player-veteran-extension,3,Curry,Stephen Curry,Point Guard,2017-2021 (FA: 2022),29,5,"$201,158,790","$40,231,758",$0
+designated-player-veteran-extension,4,Embiid,Joel Embiid,Center,2023-2026 (FA: 2027),27,4,"$195,921,600","$48,980,400",$0
+designated-player-veteran-extension,5,Lillard,Damian Lillard,Point Guard,2021-2024 (FA: 2025),28,4,"$176,265,152","$44,066,288",$0
+designated-player-veteran-extension,6,Harden,James Harden,Shooting Guard,2019-2022 (FA: 2023),27,4,"$171,131,520","$42,782,880",$0
+designated-player-veteran-extension,6,Wall,John Wall,Point Guard,2019-2022 (FA: 2023),26,4,"$171,131,520","$42,782,880",$0
+free-agent,1,Harris,Tobias Harris,Small Forward,2019-2023 (FA: 2024),26,5,"$180,000,000","$36,000,000",$0
+free-agent,2,Middleton,Khris Middleton,Small Forward,2019-2023 (FA: 2024),27,5,"$177,500,000","$35,500,000",$0
+free-agent,3,Durant,Kevin Durant,Small Forward,2019-2022 (FA: 2023),30,4,"$164,255,700","$41,063,925",$0
+free-agent,4,Irving,Kyrie Irving,Point Guard,2019-2022 (FA: 2023),27,4,"$136,490,600","$34,122,650",$0
+free-agent,5,Collins,John Collins,Power Forward,2021-2025 (FA: 2026),23,5,"$125,000,000","$25,000,000",$0
+free-agent,6,Paul,Chris Paul,Point Guard,2021-2024 (FA: 2025),36,4,"$120,000,000","$30,000,000",$0
+free-agent,7,Horford,Al Horford,Center,2019-2022 (FA: 2023),33,4,"$109,000,000","$27,250,000",$0
+free-agent,8,Allen,Jarrett Allen,Center,2021-2025 (FA: 2026),23,5,"$100,000,000","$20,000,000",$0
+free-agent,8,Vucevic,Nikola Vucevic,Center,2019-2022 (FA: 2023),28,4,"$100,000,000","$25,000,000",$0
+free-agent,10,Robinson,Duncan Robinson,Small Forward,2021-2024 (FA: 2025),27,5,"$90,000,000","$18,000,000",$0
+free-agent,10,Powell,Norman Powell,Shooting Guard,2021-2025 (FA: 2026),28,5,"$90,000,000","$18,000,000",$0
+free-agent,12,Barnes,Harrison Barnes,Small Forward,2019-2022 (FA: 2023),27,4,"$85,000,000","$21,250,000",$0
+free-agent,12,Brogdon,Malcolm Brogdon,Point Guard,2019-2022 (FA: 2023),26,4,"$85,000,000","$21,250,000",$0
+free-agent,12,VanVleet,Fred VanVleet,Point Guard,2020-2023 (FA: 2024),26,4,"$85,000,000","$21,250,000",$0
+free-agent,15,Bertans,Davis Bertans,Small Forward,2020-2024 (FA: 2025),28,5,"$80,000,000","$16,000,000",$0
+free-agent,16,Hardaway Jr.,Tim Hardaway Jr.,Shooting Guard,2021-2024 (FA: 2025),29,4,"$75,000,000","$18,750,000",$0
+free-agent,16,Harris,Joe Harris,Shooting Guard,2020-2023 (FA: 2024),29,4,"$75,000,000","$18,750,000",$0
+free-agent,18,Bogdanovic,Bojan Bogdanovic,Small Forward,2019-2022 (FA: 2023),30,4,"$73,100,000","$18,275,000",$0
+free-agent,19,Fournier,Evan Fournier,Shooting Guard,2021-2024 (FA: 2025),28,4,"$73,000,000","$18,250,000",$0
+free-agent,20,Bogdanovic,Bogdan Bogdanovic,Shooting Guard,2020-2023 (FA: 2024),28,4,"$72,000,000","$18,000,000",$0
+free-agent,21,Conley,Mike Conley,Point Guard,2021-2023 (FA: 2024),33,3,"$68,040,000","$22,680,000",$0
+free-agent,22,Morris Sr.,Marcus Morris Sr.,Small Forward,2020-2023 (FA: 2024),31,4,"$64,000,000","$16,000,000",$0
+free-agent,23,Randle,Julius Randle,Power Forward,2019-2021 (FA: 2022),24,3,"$62,100,000","$20,700,000",$0
+free-agent,24,Beasley,Malik Beasley,Shooting Guard,2020-2023 (FA: 2024),24,4,"$60,000,000","$15,000,000","$300,000"
+free-agent,25,Rozier,Terry Rozier,Point Guard,2019-2021 (FA: 2022),25,3,"$56,700,000","$18,900,000",$0
+free-agent,26,Ross,Terrence Ross,Shooting Guard,2019-2022 (FA: 2023),28,4,"$54,000,000","$13,500,000",$0
+free-agent,27,Lopez,Brook Lopez,Center,2019-2022 (FA: 2023),31,4,"$52,000,000","$13,000,000",$0
+free-agent,28,Smart,Marcus Smart,Point Guard,2018-2021 (FA: 2022),24,4,"$51,999,900","$12,999,975",$0
+free-agent,29,Trent Jr.,Gary Trent Jr.,Shooting Guard,2021-2023 (FA: 2024),22,3,"$51,840,000","$17,280,000",$0
+free-agent,30,Clarkson,Jordan Clarkson,Point Guard,2020-2023 (FA: 2024),28,4,"$51,520,000","$12,880,000",$0
+free-agent,31,Rubio,Ricky Rubio,Point Guard,2019-2021 (FA: 2022),28,3,"$51,000,000","$17,000,000",$0
+free-agent,32,Holmes,Richaun Holmes,Center,2021-2024 (FA: 2025),27,4,"$46,522,560","$11,630,640",$0
+free-agent,33,Valanciunas,Jonas Valanciunas,Center,2019-2021 (FA: 2022),27,3,"$45,000,000","$15,000,000",$0
+free-agent,34,Young,Thaddeus Young,Power Forward,2019-2021 (FA: 2022),31,3,"$43,635,000","$14,545,000",$0
+free-agent,35,Rose,Derrick Rose,Point Guard,2021-2023 (FA: 2024),32,3,"$43,562,189","$14,520,730",$0
+free-agent,36,Beverley,Patrick Beverley,Point Guard,2019-2021 (FA: 0),30,3,"$40,000,000","$13,333,333",$0
+free-agent,37,Caldwell-Pope,Kentavious Caldwell-Pope,Shooting Guard,2020-2022 (FA: 2023),27,3,"$39,116,585","$13,038,862",$0
+free-agent,38,Hart,Josh Hart,Shooting Guard,2021-2023 (FA: 2024),26,3,"$37,920,000","$12,640,000",$0
+free-agent,39,Olynyk,Kelly Olynyk,Power Forward,2021-2023 (FA: 2024),30,3,"$37,195,122","$12,398,374",$0
+free-agent,40,Caruso,Alex Caruso,Shooting Guard,2021-2024 (FA: 2025),26,4,"$36,980,000","$9,245,000",$0
+free-agent,41,Kleber,Maxi Kleber,Power Forward,2019-2022 (FA: 2023),27,4,"$35,600,000","$8,900,000",$0
+free-agent,42,Melton,De'Anthony Melton,Shooting Guard,2020-2023 (FA: 2024),22,4,"$34,627,688","$8,656,922",$0
+free-agent,43,McConnell,T.J. McConnell,Point Guard,2021-2024 (FA: 2025),29,4,"$33,600,000","$8,400,000",$0
+free-agent,44,Curry,Seth Curry,Shooting Guard,2019-2022 (FA: 2023),28,4,"$32,000,000","$8,000,000",$0
+free-agent,45,Lamb,Jeremy Lamb,Shooting Guard,2019-2021 (FA: 2022),27,3,"$31,500,000","$10,500,000",$0
+free-agent,46,Horton-Tucker,Talen Horton-Tucker,Shooting Guard,2021-2023 (FA: 2024),20,3,"$30,780,000","$10,260,000",$0
+free-agent,47,Burks,Alec Burks,Shooting Guard,2021-2023 (FA: 2024),30,3,"$30,038,400","$10,012,800",$0
+free-agent,47,Bullock,Reggie Bullock,Small Forward,2021-2023 (FA: 2024),30,3,"$30,038,400","$10,012,800",$0
+free-agent,49,Barton,Will Barton,Small Forward,2021-2022 (FA: 2023),29,2,"$30,000,000","$15,000,000",$0
+free-agent,50,Favors,Derrick Favors,Center,2020-2022 (FA: 2023),29,3,"$29,162,700","$9,720,900",$0
+free-agent,50,Crowder,Jae Crowder,Small Forward,2020-2022 (FA: 2023),30,3,"$29,162,700","$9,720,900",$0
+free-agent,52,Wright,Delon Wright,Point Guard,2019-2021 (FA: 2022),26,3,"$28,050,000","$9,350,000",$0
+free-agent,53,Noel,Nerlens Noel,Center,2021-2023 (FA: 2024),27,3,"$27,720,000","$9,240,000",$0
+free-agent,54,Saric,Dario Saric,Power Forward,2020-2022 (FA: 2023),26,3,"$27,000,000","$9,000,000",$0
+free-agent,55,Jones,Tyus Jones,Point Guard,2019-2021 (FA: 2022),23,3,"$26,445,300","$8,815,100",$0
+free-agent,56,Poeltl,Jakob Poeltl,Center,2020-2022 (FA: 2023),25,3,"$26,250,000","$8,750,000",$0
+free-agent,57,Bryant,Thomas Bryant,Center,2019-2021 (FA: 2022),21,3,"$25,000,000","$8,333,333",$0
+free-agent,58,Plumlee,Mason Plumlee,Power Forward,2020-2022 (FA: 2023),30,3,"$24,662,500","$8,220,833",$0
+free-agent,59,Oubre Jr.,Kelly Oubre Jr.,Small Forward,2021-2022 (FA: 2023),25,2,"$24,600,000","$12,300,000",$0
+free-agent,60,Collins,Zach Collins,Center,2021-2023 (FA: 2024),23,3,"$22,050,000","$7,350,000",$0
+free-agent,61,Jackson,Reggie Jackson,Point Guard,2021-2022 (FA: 2023),31,2,"$21,599,760","$10,799,880",$0
+free-agent,62,Hernangomez,Juan Hernangomez,Power Forward,2020-2022 (FA: 2023),25,3,"$21,037,320","$7,012,440",$0
+free-agent,63,Zubac,Ivica Zubac,Center,2019-2021 (FA: 2023),22,3,"$21,000,000","$7,000,000",$0
+free-agent,64,Birch,Khem Birch,Power Forward,2021-2023 (FA: 2024),28,3,"$20,002,500","$6,667,500",$0
+free-agent,65,Green,Danny Green,Shooting Guard,2021-2022 (FA: 2023),34,2,"$20,000,000","$10,000,000",$0
+free-agent,66,Payne,Cameron Payne,Point Guard,2021-2023 (FA: 2024),26,3,"$19,000,000","$6,333,333",$0
+free-agent,67,Ibaka,Serge Ibaka,Center,2020-2021 (FA: 2022),31,2,"$18,978,900","$9,489,450",$0
+free-agent,67,Harrell,Montrezl Harrell,Power Forward,2020-2021 (FA: 2022),26,2,"$18,978,900","$9,489,450",$0
+free-agent,67,Jones Jr.,Derrick Jones Jr.,Small Forward,2020-2021 (FA: 2022),23,2,"$18,978,900","$9,489,450",$0
+free-agent,70,Gay,Rudy Gay,Small Forward,2021-2023 (FA: 2024),34,3,"$18,553,500","$6,184,500",$0
+free-agent,71,Holiday,Justin Holiday,Small Forward,2020-2022 (FA: 2023),31,3,"$18,019,260","$6,006,420",$0
+free-agent,72,Walker,Kemba Walker,Point Guard,2021-2022 (FA: 2023),31,2,"$17,894,491","$8,947,246",$0
+free-agent,73,Green,JaMychal Green,Power Forward,2021-2022 (FA: 2023),31,2,"$16,400,000","$8,200,000",$0
+free-agent,74,Connaughton,Pat Connaughton,Shooting Guard,2020-2022 (FA: 2023),27,3,"$16,000,000","$5,333,333",$0
+free-agent,75,Nwaba,David Nwaba,Shooting Guard,2021-2023 (FA: 2024),28,3,"$15,000,000","$5,000,000",$0
+free-agent,75,Korkmaz,Furkan Korkmaz,Shooting Guard,2021-2023 (FA: 2024),24,3,"$15,000,000","$5,000,000",$0
+free-agent,77,Looney,Kevon Looney,Power Forward,2019-2021 (FA: 2022),23,3,"$14,464,287","$4,821,429",$0
+free-agent,78,Tucker,P.J. Tucker,Power Forward,2021-2022 (FA: 2023),36,2,"$14,350,000","$7,175,000",$0
+free-agent,79,Boucher,Chris Boucher,Power Forward,2020-2021 (FA: 2022),27,2,"$13,520,000","$6,760,000",$0
+free-agent,80,Vanderbilt,Jarred Vanderbilt,Power Forward,2021-2023 (FA: 2024),22,3,"$13,122,000","$4,374,000",$0
+free-agent,81,Mills,Patrick Mills,Point Guard,2021-2022 (FA: 2023),32,2,"$12,074,500","$6,037,250",$0
+free-agent,82,Finney-Smith,Dorian Finney-Smith,Small Forward,2019-2021 (FA: 2022),26,3,"$12,000,000","$4,000,000",$0
+free-agent,83,Layman,Jake Layman,Small Forward,2019-2021 (FA: 2022),25,3,"$11,283,255","$3,761,085",$0
+free-agent,84,Diallo,Hamidou Diallo,Shooting Guard,2021-2022 (FA: 2023),23,2,"$10,400,000","$5,200,000",$0
+free-agent,85,Nunn,Kendrick Nunn,Shooting Guard,2021-2022 (FA: 2023),26,2,"$10,250,000","$5,125,000",$0
+free-agent,86,Gibson,Taj Gibson,Power Forward,2021-2022 (FA: 2023),35,2,"$10,100,000","$5,050,000",$0
+free-agent,87,Joseph,Cory Joseph,Point Guard,2021-2022 (FA: 2023),29,2,"$10,065,000","$5,032,500",$0
+free-agent,88,Craig,Torrey Craig,Small Forward,2021-2022 (FA: 2023),30,2,"$10,000,000","$5,000,000",$0
+free-agent,89,Scott,Mike Scott,Power Forward,2019-2020 (FA: 2021),30,2,"$9,800,000","$4,900,000",$0
+free-agent,90,Jackson,Josh Jackson,Shooting Guard,2020-2021 (FA: 2022),23,2,"$9,772,350","$4,886,175",$0
+free-agent,91,Burke,Trey Burke,Point Guard,2020-2022 (FA: 2023),28,3,"$9,450,000","$3,150,000",$0
+free-agent,92,Smith,Ishmael Smith,Point Guard,2021-2022 (FA: 2023),33,2,"$9,225,000","$4,612,500",$0
+free-agent,93,Konchar,John Konchar,Shooting Guard,2020-2023 (FA: 2024),24,4,"$9,000,000","$2,250,000",$0
+free-agent,93,Green,Jeff Green,Power Forward,2021-2022 (FA: 2023),34,2,"$9,000,000","$4,500,000",$0
+free-agent,95,Harkless,Maurice Harkless,Small Forward,2021-2022 (FA: 2023),27,2,"$8,912,580","$4,456,290",$0
+free-agent,95,Portis,Bobby Portis,Power Forward,2021-2022 (FA: 2023),26,2,"$8,912,580","$4,456,290",$0
+free-agent,97,Winslow,Justise Winslow,Small Forward,2021-2022 (FA: 2023),25,2,"$8,000,000","$4,000,000",$0
+free-agent,97,Davis,Terence Davis,Shooting Guard,2021-2022 (FA: 2023),24,2,"$8,000,000","$4,000,000",$0
+free-agent,97,Hill,George Hill,Point Guard,2021-2022 (FA: 2023),35,2,"$8,000,000","$4,000,000",$0
+free-agent,100,Louzada,Didi Louzada,Small Forward,2021-2024 (FA: 2025),22,4,"$7,686,312","$1,921,578",$0
+free-agent,101,Len,Alex Len,Center,2021-2022 (FA: 2023),28,2,"$7,650,600","$3,825,300",$0
+free-agent,102,Hernangomez,Willy Hernangomez,Center,2021-2023 (FA: 2024),27,3,"$7,330,743","$2,443,581",$0
+free-agent,103,Marjanovic,Boban Marjanovic,Center,2021-2022 (FA: 2023),30,2,"$7,000,000","$3,500,000",$0
+free-agent,103,Muscala,Mike Muscala,Power Forward,2021-2022 (FA: 2023),30,2,"$7,000,000","$3,500,000",$0
+free-agent,105,Niang,Georges Niang,Small Forward,2021-2022 (FA: 2023),28,2,"$6,765,000","$3,382,500",$0
+free-agent,106,Batum,Nicolas Batum,Small Forward,2021-2022 (FA: 2023),32,2,"$6,498,559","$3,249,280",$0
+free-agent,107,McLaughlin,Jordan McLaughlin,Point Guard,2021-2023 (FA: 2024),25,3,"$6,480,000","$2,160,000",$0
+free-agent,108,Campazzo,Facundo Campazzo,Point Guard,2020-2021 (FA: 2022),0,2,"$6,400,000","$3,200,000",$0
+free-agent,109,Jackson,Frank Jackson,Point Guard,2021-2022 (FA: 2023),23,2,"$6,150,000","$3,075,000",$0
+free-agent,110,Brown,Sterling Brown,Shooting Guard,2021-2022 (FA: 2023),26,2,"$6,000,000","$3,000,000",$0
+free-agent,111,Schröder,Dennis Schröder,Point Guard,2021-2021 (FA: 2022),27,1,"$5,890,000","$5,890,000",$0
+free-agent,112,Lee,Saben Lee,Point Guard,2021-2023 (FA: 2024),22,3,"$5,143,840","$1,714,613",$0
+free-agent,113,Lyles,Trey Lyles,Power Forward,2021-2022 (FA: 2023),25,2,"$5,125,000","$2,562,500",$0
+free-agent,114,Williams,Louis Williams,Shooting Guard,2021-2021 (FA: 2022),34,1,"$5,000,000","$5,000,000",$0
+free-agent,114,McGee,JaVale McGee,Center,2021-2021 (FA: 2022),33,1,"$5,000,000","$5,000,000",$0
+free-agent,114,Lopez,Robin Lopez,Center,2021-2021 (FA: 2022),33,1,"$5,000,000","$5,000,000",$0
+free-agent,117,Brown Jr.,Bruce Brown Jr.,Shooting Guard,2021-2021 (FA: 2022),24,1,"$4,736,102","$4,736,102",$0
+free-agent,118,Landale,Jock Landale,Center,2021-2022 (FA: 2023),25,2,"$4,544,095","$2,272,048",$0
+free-agent,119,Forbes,Bryn Forbes,Shooting Guard,2021-2021 (FA: 2022),28,1,"$4,500,000","$4,500,000",$0
+free-agent,120,Dieng,Gorgui Dieng,Center,2021-2021 (FA: 2022),31,1,"$4,000,000","$4,000,000",$0
+free-agent,121,Bradley,Tony Bradley,Center,2021-2022 (FA: 2023),23,2,"$3,825,574","$1,912,787",$0
+free-agent,121,Ntilikina,Frank Ntilikina,Point Guard,2021-2022 (FA: 2023),23,2,"$3,825,574","$1,912,787",$0
+free-agent,123,Bates-Diop,Keita Bates-Diop,Small Forward,2021-2022 (FA: 2023),25,2,"$3,607,937","$1,803,969",$0
+free-agent,123,Wagner,Moritz Wagner,Center,2021-2022 (FA: 2023),24,2,"$3,607,937","$1,803,969",$0
+free-agent,123,Mykhailiuk,Sviatoslav Mykhailiuk,Shooting Guard,2021-2022 (FA: 2023),24,2,"$3,607,937","$1,803,969",$0
+free-agent,123,Antetokounmpo,Thanasis Antetokounmpo,Small Forward,2021-2022 (FA: 2023),29,2,"$3,607,937","$1,803,969",$0
+free-agent,127,Green,Javonte Green,Shooting Guard,2021-2022 (FA: 2023),28,2,"$3,484,855","$1,742,428",$0
+free-agent,127,Vincent,Gabe Vincent,Point Guard,2021-2022 (FA: 2023),25,2,"$3,484,855","$1,742,428",$0
+free-agent,129,Strus,Max Strus,Shooting Guard,2021-2022 (FA: 2023),25,2,"$3,421,816","$1,710,908",$0
+free-agent,130,Yurtseven,Omer Yurtseven,Center,2021-2022 (FA: 2023),23,2,"$3,241,703","$1,620,852",$0
+free-agent,131,Tate,Jae’Sean Tate,Small Forward,2020-2021 (FA: 2023),25,2,"$2,963,678","$1,481,839",$0
+free-agent,132,Rondo,Rajon Rondo,Point Guard,2021-2021 (FA: 2022),35,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Haslem,Udonis Haslem,Power Forward,2021-2021 (FA: 2022),41,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Bradley,Avery Bradley,Point Guard,2021-2021 (FA: 2022),30,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Millsap,Paul Millsap,Power Forward,2021-2021 (FA: 2022),36,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Aldridge,LaMarcus Aldridge,Power Forward,2021-2021 (FA: 2022),36,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Iguodala,Andre Iguodala,Small Forward,2021-2021 (FA: 2022),36,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Howard,Dwight Howard,Center,2021-2021 (FA: 2022),35,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Ellington,Wayne Ellington,Shooting Guard,2021-2021 (FA: 2022),33,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Griffin,Blake Griffin,Power Forward,2021-2021 (FA: 2022),32,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Anthony,Carmelo Anthony,Power Forward,2021-2021 (FA: 2022),37,1,"$2,641,691","$2,641,691",$0
+free-agent,132,Morris,Markieff Morris,Power Forward,2021-2021 (FA: 2022),31,1,"$2,641,691","$2,641,691",$0
+free-agent,143,Garza,Luka Garza,Center,2021-2022 (FA: 2023),22,2,"$2,488,776","$1,244,388",$0
+free-agent,144,Gill,Anthony Gill,Power Forward,2020-2021 (FA: 2022),28,2,"$2,416,291","$1,208,146",$0
+free-agent,145,Bazemore,Kent Bazemore,Shooting Guard,2021-2021 (FA: 2022),32,1,"$2,401,537","$2,401,537",$0
+free-agent,145,Drummond,Andre Drummond,Center,2021-2021 (FA: 2022),27,1,"$2,401,537","$2,401,537",$0
+free-agent,145,Rivers,Austin Rivers,Point Guard,2021-2021 (FA: 2022),29,1,"$2,401,537","$2,401,537",$0
+free-agent,145,Whiteside,Hassan Whiteside,Center,2021-2021 (FA: 2022),32,1,"$2,401,537","$2,401,537",$0
+free-agent,149,Oladipo,Victor Oladipo,Shooting Guard,2021-2021 (FA: 2022),29,1,"$2,389,641","$2,389,641",$0
+free-agent,149,Porter Jr.,Otto Porter Jr.,Small Forward,2021-2021 (FA: 2022),28,1,"$2,389,641","$2,389,641",$0
+free-agent,149,Snell,Tony Snell,Shooting Guard,2021-2021 (FA: 2022),29,1,"$2,389,641","$2,389,641",$0
+free-agent,149,Dedmon,Dewayne Dedmon,Center,2021-2021 (FA: 2022),31,1,"$2,389,641","$2,389,641",$0
+free-agent,149,McLemore,Ben McLemore,Small Forward,2021-2021 (FA: 2022),28,1,"$2,389,641","$2,389,641",$0
+free-agent,154,Payton,Elfrid Payton,Point Guard,2021-2021 (FA: 2022),27,1,"$2,239,544","$2,239,544",$0
+free-agent,154,Hood,Rodney Hood,Small Forward,2021-2021 (FA: 2022),28,1,"$2,239,544","$2,239,544",$0
+free-agent,156,Dellavedova,Matthew Dellavedova,Point Guard,2020-2020 (FA: 2021),30,1,"$2,174,318","$2,174,318",$0
+free-agent,157,Neto,Raul Neto,Point Guard,2021-202 (FA: 2022),29,1,"$2,089,448","$2,089,448",$0
+free-agent,157,Bjelica,Nemanja Bjelica,Power Forward,2021-2021 (FA: 2022),33,1,"$2,089,448","$2,089,448",$0
+free-agent,159,McGruder,Rodney McGruder,Shooting Guard,2021-2021 (FA: 2022),29,1,"$1,939,350","$1,939,350",$0
+free-agent,159,Luwawu-Cabarrot,Timothe Luwawu-Cabarrot,Shooting Guard,2021-2021 (FA: 2022),26,1,"$1,939,350","$1,939,350",$0
+free-agent,161,Monk,Malik Monk,Shooting Guard,2021-2021 (FA: 2022),23,1,"$1,789,256","$1,789,256",$0
+free-agent,162,Bonga,Isaac Bonga,Small Forward,2021-2021 (FA: 2022),21,1,"$1,729,217","$1,729,217",$0
+maximum,1,Thompson,Klay Thompson,Shooting Guard,2019-2023 (FA: 2024),29,5,"$189,903,600","$37,980,720",$0
+maximum,1,Davis,Anthony Davis,Power Forward,2020-2024 (FA: 2025),27,5,"$189,903,600","$37,980,720",$0
+maximum,3,Leonard,Kawhi Leonard,Small Forward,2021-2024 (FA: 2025),30,4,"$176,265,152","$44,066,288",$0
+maximum,4,Porzingis,Kristaps Porzingis,Power Forward,2019-2023 (FA: 2024),23,5,"$158,253,000","$31,650,600",$0
+maximum,4,Ingram,Brandon Ingram,Small Forward,2020-2024 (FA: 2025),23,5,"$158,253,000","$31,650,600",$0
+maximum,6,Jokic,Nikola Jokic,Center,2018-2022 (FA: 2023),23,5,"$147,710,050","$29,542,010",$0
+maximum,7,Butler,Jimmy Butler,Small Forward,2019-2022 (FA: 2023),29,4,"$140,790,600","$35,197,650",$0
+maximum,8,Russell,D'Angelo Russell,Point Guard,2019-2022 (FA: 2023),23,4,"$117,325,500","$29,331,375",$0
+maximum,9,James,Lebron James,Small Forward,2021-2022 (FA: 2023),36,2,"$85,655,532","$42,827,766",$0
