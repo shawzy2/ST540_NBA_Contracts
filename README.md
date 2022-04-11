@@ -12,4 +12,4 @@
 * Start virtualenv `source env/bin/activate`
 * Install all packages from requirements.txt `pip install -r requirements.txt`
 * Start jupyter notebook `jupyter notebook`
-* Navigate to the notebook 
+* Navigate to the notebook `scrape/scraper_sporttrac.ipynb`
