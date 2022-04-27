@@ -9,22 +9,26 @@ iters   <- 50000
 thin    <- 10
 
 # Load the data
-Y <- log(df$totalValue)
-X <- cbind(1, df$contractLength, df$draftRound, df$draftOverall, df$draftYear,
-           df$FG., df$X3P., df$X2P., df$FT., df$AST, df$STL, df$BLK, df$TOV,
-           df$PTS, df$TS.)
+Y <- log(df$aav)
+X <- cbind(df$contractLength, df$draftRound, df$draftOverall, df$draftYear,
+           df$X3P., df$X2P., df$FT., df$AST, df$STL, df$BLK, df$TOV, df$PTS)
 # Notes about predictor variables:
 # Removed age, height, and weight as their coefficients would not converge
+# Removed FG. and TS. as coefficients would not converge in Models 3 and 4
+
+# Standardize the data
+X <- scale(X)
+X <- cbind(1, X)
 
 # Assign a numeric id to the players in each team
 team <- unique(df$Tm)
-id    <- rep(NA, length(Y))
+id <- rep(NA, length(Y))
 for(j in 1:48){
-  id[df$Tm==team[j]] <- j
+  id[df$Tm == team[j]] <- j
 }
 
 n <- length(Y)       # number of observations
-p <- ncol(X)         # number of covariates (including the intercept)
+p <- ncol(X)        # number of covariates (including the intercept)
 N <- length(team)    # number of teams
 
 ##############################################################################
@@ -50,15 +54,15 @@ model_string1 <- textConnection("model{
   taub ~ dgamma(0.1, 0.1)
 }")
 
-data    <- list(Y=Y,X=X,n=n,p=p)
-model1   <- jags.model(model_string1,data = data,quiet=TRUE, n.chains=2)
+data    <- list(Y=Y, X=X, n=n, p=p)
+model1   <- jags.model(model_string1, data = data, quiet=TRUE, n.chains=2)
 update(model1, burn, progress.bar="none")
 
 samples1 <- coda.samples(model1,
-                         variable.names=c("beta","taue","taub"),
-                         n.iter=iters,
+                         variable.names = c("beta", "taue", "taub"),
+                         n.iter = iters,
                          #thin=thin,
-                         progress.bar="none")
+                         progress.bar = "none")
 
 summary1 <- summary(samples1)
 
@@ -85,15 +89,15 @@ model_string2 <- textConnection("model{
   taub ~ dgamma(0.1, 0.1)
 }")
 
-data    <- list(Y=Y,X=X,n=n,p=p)
-model2   <- jags.model(model_string2,data = data,quiet=TRUE, n.chains=2)
+data    <- list(Y=Y, X=X, n=n, p=p)
+model2   <- jags.model(model_string2, data = data, quiet=TRUE, n.chains=2)
 update(model2, burn, progress.bar="none")
 
 samples2 <- coda.samples(model2,
-                         variable.names=c("beta","taue","taub"),
-                         n.iter=iters,
+                         variable.names=c("beta", "taue", "taub"),
+                         n.iter = iters,
                          #thin=thin,
-                         progress.bar="none")
+                         progress.bar = "none")
 
 summary2 <- summary(samples2)
 
@@ -129,7 +133,7 @@ model_string3 <- textConnection("model{
 }")
 
 data <- list(Y=Y,n=n,N=N,X=X,p=p,id=id)
-model3   <- jags.model(model_string3,data = data,quiet=TRUE, n.chains=2)
+model3   <- jags.model(model_string3, data = data, quiet=TRUE, n.chains=2)
 update(model3, burn, progress.bar="none")
 
 samples3 <- coda.samples(model3,
