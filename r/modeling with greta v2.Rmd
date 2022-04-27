@@ -1,0 +1,453 @@
+---
+title: "NBA Contract Modeling"
+author: "Matthew Perkins"
+date: "4/25/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir="~/NCSU/ST 540 spring 2022/final exam/Input")
+```
+
+```{r, warning=FALSE,message=FALSE}
+library(tidyverse)
+library(data.table)
+library(rjags)
+library(parallel)
+library(arm) # contains bayesglm function
+library(greta)
+library(coda)
+```
+
+
+
+loading the data with reduced number of variables
+```{r}
+train = fread('allSignificantPlayersRed.csv')
+train_rest = fread('lowGamesPlayersRed.csv')
+train = rbind(train, train_rest)
+head(train)
+train[,undrafted:=ifelse(undrafted, 1, 0)]
+train[,signSeason:=NULL]
+test = train[signYear==2021,]
+train = train[(signYear!=2021),]
+print(nrow(test))
+print(nrow(train))
+```
+
+
+
+
+there were 194 test points and 1218 rows for training.
+
+split the data into three groups based on the combination of total games and WAMP. I chose these because of their strong paired correlation with aav and because they are part of the predictors. It would be weird to base the groupings on aav since that would imply one already knows aav.
+```{r}
+interMPG = train$WAMP*train$totalGames
+lower_box = quantile(interMPG, .20)
+upper_box = quantile(interMPG, .65)
+train$interMPG = interMPG
+train[,groups:=ifelse((interMPG<..lower_box), 1, 
+                     ifelse(interMPG>..upper_box, 2, 3))]
+train$interMPG=NULL
+ggplot(train, aes(x=WAMP, y = totalGames, size=aav, color=as.factor(groups)))+
+geom_point()
+```
+
+```{r split}
+# create the first group which is about the players in the upper quartile
+train1 = train[groups==2,]
+interMPG = test$WAMP*test$totalGames
+test$interMPG = interMPG
+test[,groups:=ifelse((interMPG<..lower_box), 1, 
+                     ifelse(interMPG>..upper_box, 2, 3))]
+test$interMPG=NULL
+test1 = test[groups==2, ]
+ggplot(test, aes(x=WAMP, y = totalGames, size=aav, color=as.factor(groups)))+
+geom_point()
+```
+
+
+
+Now prep the data for greta
+```{r train_test}
+# function that take the train and test data and creates vectors and 
+# matrices of the trained test data but with scaled predictors
+make_train_test_data = function(data, test_data, target, remove_cols=c(), scale=TRUE){
+  data = as.data.table(data)
+  test_data=as.data.table(test_data)
+  y = as.matrix(data[,..target])[,1]
+  yTest = as.matrix(test_data[,..target])[,1]
+  x = data[,-remove_cols, with=FALSE]
+  xTest = test_data[,-remove_cols, with=FALSE]
+  if(scale){
+      x = scale(x)
+      xTest = scale(xTest, attr(x, "scaled:center"), attr(x, "scaled:scale"))
+  }
+  return(list(y=y,yTest=yTest, x=x, xTest=xTest))
+}
+
+First_group = make_train_test_data(data=train1,
+                                   test_data=test1, target='aav',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups'),
+                                   )
+
+```
+
+the three models will be $Y_i\sim Normal(\displaystyle \sum_{j=1}^{p} x_{ij}* \beta_{j} + \alpha, \sigma^2)$, with priors for beta being the laplace (double exponential) priors, that is $\beta_j \sim laplace(0,\ 0.01)$. The $Y_i$ are normalized using the *bestNormalize* package and the $x_{ij}$ will be scaled.  The intercept, $\alpha$, will have a prior of $\alpha \sim Normal(0, 100)$. Finally, the standard deviation will have a prior of $\sigma \sim InvGamma(.01, .01)$. 
+
+
+```{r}
+# define spike slab prior like that from documentation 
+# https://rdrr.io/cran/greta/f/inst/examples/linear_spike_and_slab.Rmd
+nvar = ncol(First_group$x)
+spike_and_slab <- function (spikiness = 0.1, slabiness = 10, center=0, dim = NULL) {
+  stopifnot(spikiness < 1)
+  slab <- normal(center, slabiness, dim = dim)
+  spike <- laplace(center, spikiness, dim = dim)
+  spike * slab
+}
+min_max_transform = function(data, method=list(), predict=FALSE, inverse=FALSE, range=c(0,1), hard_max=NULL, hard_min=NULL){
+  if(inverse){
+    return((data-method$range[1])*(method$max_data-method$min_data)/(method$range[2]-method$range[1])+method$min_data)
+  }
+  if(predict){
+    return((method$range[2]-method$range[1])*(data-method$min_data)/(method$max_data-method$min_data) + method$range[1])
+  }
+  if(is.null(hard_min)){
+    
+    min_data=min(data)
+  }else{
+    min_data=hard_min
+  }
+  if(is.null(hard_max)){
+  max_data=max(data)
+  }else{
+    max_data=hard_max
+  }
+  data_transformed = (range[2]-range[1])*(data-min_data)/(max_data-min_data)+range[1]
+  return(list(transformed=data_transformed,
+              min_data=min_data,
+              max_data=max_data,
+              range=range))
+  
+}
+library(bestNormalize)
+y_norm =bestNormalize(First_group$y)
+y_normalized = y_norm$x.t
+# set priors for the coefficients, intercept, and standard deviation
+sigma = inverse_gamma(.01, .01)
+int = normal(0, 10)
+coef = laplace(0, 0.01, dim=nvar)
+# define the expected value
+greta_x = as_data(First_group$x)
+greta_y = as_data(y_normalized)
+mu = int + greta_x %*% coef
+# indicate likelihood distribution with turncated normal
+max_trunc = predict(y_norm, newdata=.5*112)
+min_trunc = predict(y_norm, newdata=.125)
+distribution(greta_y) = normal(mu, sigma, truncation=c(min_trunc,
+                                                       max_trunc))
+yTest_normalized = predict(y_norm, newdata=First_group$yTest)
+# set up the expected values for the test data set
+greta_y_test = as_data(yTest_normalized)
+greta_x_test = as_data(First_group$xTest)
+mup = int + greta_x_test %*% coef
+
+# make model
+m = model( coef, int, sigma)
+```
+
+
+
+```{r}
+draws = greta::mcmc(m, n_samples = 30000, n_cores=4, chains=2,
+                    warmup=10000, verbose=FALSE)
+```
+
+```{r}
+effectiveSize(draws)
+```
+
+```{r}
+gelman.diag(draws)
+```
+
+```{r}
+geweke.diag(draws)
+```
+
+
+
+```{r, fig.height=30}
+# sample of 30 trace plots
+library(bayesplot)
+mcmc_trace(draws[[1]][,1:30], facet_args = list(ncol=3))
+```
+
+
+
+```{r, fig.height=10}
+
+mcmc_intervals(draws)
+```
+
+
+```{r,fig.height=40}
+mcmc_acf_bar(draws[[1]][,1:30])
+```
+
+
+
+calculating DIC and doing predicitions 
+
+```{r}
+results = summary(draws)
+results
+```
+
+```{r}
+intercept = results$statistics['int', 'Mean']
+shape = results$statistics['sigma' , 'Mean']
+```
+
+
+```{r}
+# get table of just quanitles for coefficients
+coefs = results$quantiles[1:(nrow(results$quantiles)-2), ]
+coefs = data.table(coefs, keep.rownames = TRUE)
+coefs[,significant:=ifelse((0 < `97.5%`)&(0>`2.5%`), 0, 1)]
+vars_keep = (coefs[significant==1,rn])
+vars_keep_bool = coefs$significant==1
+vars_names = colnames(First_group$x)[vars_keep_bool]
+vars_names
+```
+
+
+
+```{r}
+ypred = calculate(mup, values=draws, trace_batch_size = 250, nsim=100)
+ypred = colMeans(ypred$mup)
+ypred = predict(y_norm, ypred, inverse=TRUE)
+ypred = data.frame(pred=ypred, obs=First_group$yTest)
+caret::postResample(pred=ypred, obs=First_group$yTest)
+```
+
+
+```{r}
+# make residuals 
+ypred$residuals = (ypred$obs-ypred$pred)
+plot(ypred$obs, ypred$residuals)
+plot(ypred$obs, ypred$pred)
+
+
+```
+
+
+
+```{r}
+test2 = test[groups==1, ]
+train2 = train[groups==1,]
+Second_group = make_train_test_data(data=train2,
+                                   test_data=test2, target='aav',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups'),
+                                   )
+y_norm =bestNormalize(Second_group$y)
+y_normalized = y_norm$x.t
+# set priors for the coefficients, intercept, the multiplicative constants 
+# in the beta 
+sigma = inverse_gamma(.01, .01)
+int = normal(0, 10)
+coef = laplace(0, 0.01, dim=nvar)
+# define the expected value
+greta_x = as_data(Second_group$x)
+greta_y = as_data(y_normalized)
+mu = int + greta_x %*% coef
+# indicated likelihood distribution
+max_trunc = predict(y_norm, newdata=.5*112)
+min_trunc = predict(y_norm, newdata=.125)
+distribution(greta_y) = normal(mu, sigma, truncation=c(min_trunc,
+                                                       max_trunc))
+yTest_normalized = predict(y_norm, newdata=Second_group$yTest)
+greta_y_test = as_data(yTest_normalized)
+greta_x_test = as_data(Second_group$xTest)
+mup = int + greta_x_test %*% coef
+
+# make model
+m = model( coef, int, sigma)
+```
+
+
+
+```{r model2}
+draws = greta::mcmc(m, n_samples = 30000, n_cores=4, chains=2,
+                    warmup=10000, verbose=FALSE)
+effectiveSize(draws)
+```
+
+
+```{r, fig.height=15}
+mcmc_intervals(draws)
+```
+
+
+```{r, fig.height=15}
+mcmc_trace(draws[[1]][,1:30], facet_args = list(ncol=3))
+```
+
+```{r}
+results = summary(draws)
+```
+
+
+```{r}
+# get table of just quanitles for coefficients
+coefs = results$quantiles[1:(nrow(results$quantiles)-2), ]
+coefs = data.table(coefs, keep.rownames = TRUE)
+coefs[,significant:=ifelse((0 < `97.5%`)&(0>`2.5%`), 0, 1)]
+vars_keep = (coefs[significant==1,rn])
+vars_keep_bool = coefs$significant==1
+vars_names = colnames(First_group$x)[vars_keep_bool]
+vars_names
+```
+
+
+
+```{r}
+# get predictionss
+ypred2 = calculate(mup, values=draws, trace_batch_size = 250, nsim=100)
+ypred2 = colMeans(ypred2$mup)
+ypred2 = predict(y_norm, ypred2, inverse=TRUE)
+ypred2 = data.frame(pred=ypred2, obs=Second_group$yTest)
+caret::postResample(pred=ypred2, obs=Second_group$yTest)
+```
+
+
+```{r}
+# make residuals 
+ypred2$residuals = (ypred2$obs-ypred2$pred)
+#ypred2 = ypred[ypred$obs<10,]
+plot(ypred2$obs, ypred2$residuals)
+plot(ypred2$obs, ypred2$pred)
+#caret::postResample(pred=ypred2$pred, ypred2$obs)
+
+```
+
+
+dwight powell sign year 2016 is the extreme outlier here
+
+
+
+```{r model3 prep}
+test3 = test[groups==3, ]
+train3 = train[groups==3,]
+third_group = make_train_test_data(data=train3,
+                                   test_data=test3, target='aav',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups'),
+                                   )
+y_norm =bestNormalize(third_group$y)
+y_normalized = y_norm$x.t
+# set priors for the coefficients, intercept, the multiplicative constants 
+# in the beta 
+sigma = inverse_gamma(.01, .01)
+int = normal(0, 10)
+coef = laplace(0, 0.01, dim=nvar)
+# define the expected value
+greta_x = as_data(third_group$x)
+greta_y = as_data(y_normalized)
+mu = int + greta_x %*% coef
+# indicated likelihood distribution
+max_trunc = predict(y_norm, newdata=.5*112)
+min_trunc = predict(y_norm, newdata=.125)
+distribution(greta_y) = normal(mu, sigma, truncation=c(min_trunc,
+                                                       max_trunc))
+yTest_normalized = predict(y_norm, newdata=third_group$yTest)
+greta_y_test = as_data(yTest_normalized)
+greta_x_test = as_data(third_group$xTest)
+mup = int + greta_x_test %*% coef
+
+# make model
+m = model( coef, int, sigma)
+```
+
+
+
+
+```{r model3}
+draws = greta::mcmc(m, n_samples = 30000, n_cores=4, chains=2,
+                    warmup=10000, verbose=FALSE)
+effectiveSize(draws)
+```
+
+
+```{r, fig.height=15}
+mcmc_intervals(draws)
+```
+
+
+```{r, fig.height=15}
+mcmc_trace(draws[[1]][,1:30], facet_args = list(ncol=3))
+```
+
+```{r}
+results = summary(draws)
+```
+
+
+```{r}
+# get table of just quanitles for coefficients
+coefs = results$quantiles[1:(nrow(results$quantiles)-2), ]
+coefs = data.table(coefs, keep.rownames = TRUE)
+coefs[,significant:=ifelse((0 < `97.5%`)&(0>`2.5%`), 0, 1)]
+vars_keep = (coefs[significant==1,rn])
+vars_keep_bool = coefs$significant==1
+vars_names = colnames(First_group$x)[vars_keep_bool]
+vars_names
+```
+
+
+
+```{r}
+# get predictionss
+ypred3 = calculate(mup, values=draws, trace_batch_size = 250, nsim=100)
+ypred3 = colMeans(ypred3$mup)
+ypred3 = predict(y_norm, ypred3, inverse=TRUE)
+ypred3 = data.frame(pred=ypred3, obs=third_group$yTest)
+caret::postResample(pred=ypred3, obs=third_group$yTest)
+```
+
+
+```{r}
+# make residuals 
+ypred3$residuals = (ypred3$obs-ypred3$pred)
+#ypred2 = ypred[ypred$obs<10,]
+plot(ypred3$obs, ypred3$residuals)
+plot(ypred3$obs, ypred3$pred)
+#caret::postResample(pred=ypred2$pred, ypred2$obs)
+
+```
+
+
+
+```{r}
+ypred_total = rbind(ypred, ypred2, ypred3)
+ypred_total = unique(ypred_total)
+caret::postResample(ypred_total$pred, ypred_total$obs)
+```
+
+
+```{r}
+plot(ypred_total$obs, ypred_total$residuals )
+plot(ypred_total$obs, ypred_total$pred)
+```
+
+
+
+
+
