@@ -77,6 +77,17 @@ model_string1 <- textConnection("model{
   for(i in 1:np){
     Yp[i] ~ dnorm(inprod(Xp[i,], beta[]), taue)
   }
+  
+  # Posterior preditive checks
+  for(i in 1:no){
+    Y2[i] ~ dnorm(inprod(Xo[i,], beta[]), taue)
+  }
+  z[1] <- mean(Y2[])
+  z[2] <- min(Y2[])
+  z[3] <- max(Y2[])
+  z[4] <- max(Y2[])-min(Y2[])
+  z[5] <- sd(Y2[])
+  
 }")
 
 data <- list(Yo=Yo, Xo=Xo, Xp=Xp, no=no, np=np, p=p)  # Yp is not sent to JAGS!
@@ -84,7 +95,7 @@ model1 <- jags.model(model_string1, data = data, quiet = TRUE, n.chains = 2)
 update(model1, burn, progress.bar="none")
 
 samples1 <- coda.samples(model1,
-                         variable.names = c("Yp", "beta", "taub", "taue"),
+                         variable.names = c("Yp", "beta", "taub", "taue", "z"),
                          n.iter = iters,
                          #thin=thin,
                          progress.bar = "none")
@@ -117,6 +128,17 @@ model_string2 <- textConnection("model{
   for(i in 1:np){
     Yp[i] ~ dnorm(inprod(Xp[i,], beta[]), taue)
   }
+  
+  # Posterior preditive checks
+  for(i in 1:no){
+    Y2[i] ~ dnorm(inprod(Xo[i,], beta[]), taue)
+  }
+  z[1] <- mean(Y2[])
+  z[2] <- min(Y2[])
+  z[3] <- max(Y2[])
+  z[4] <- max(Y2[])-min(Y2[])
+  z[5] <- sd(Y2[])
+  
 }")
 
 data <- list(Yo=Yo, Xo=Xo, Xp=Xp, no=no, np=np, p=p)  # Yp is not sent to JAGS!
@@ -124,7 +146,7 @@ model2   <- jags.model(model_string2, data = data, quiet=TRUE, n.chains=2)
 update(model2, burn, progress.bar="none")
 
 samples2 <- coda.samples(model2,
-                         variable.names=c("Yp", "beta", "taub", "taue"),
+                         variable.names=c("Yp", "beta", "taub", "taue", "z"),
                          n.iter = iters,
                          #thin=thin,
                          progress.bar = "none")
@@ -158,6 +180,16 @@ model_string3 <- textConnection("model{
   for(i in 1:np){
     Yp[i] ~ dnorm(inprod(Xp[i,], beta[idp[i],]), taue)
   }
+  
+  # Posterior preditive checks
+  for(i in 1:no){
+    Y2[i] ~ dnorm(inprod(Xo[i,], beta[ido[i],]), taue)
+  }
+  z[1] <- mean(Y2[])
+  z[2] <- min(Y2[])
+  z[3] <- max(Y2[])
+  z[4] <- max(Y2[])-min(Y2[])
+  z[5] <- sd(Y2[])
 }")
 
 data <- list(Yo=Yo, Xo=Xo, Xp=Xp, no=no, np=np, ido=ido, idp=idp, N=N,
@@ -166,7 +198,7 @@ model3   <- jags.model(model_string3, data = data, quiet=TRUE, n.chains=2)
 update(model3, burn, progress.bar="none")
 
 samples3 <- coda.samples(model3,
-                         variable.names=c("Yp", "beta", "taue"),
+                         variable.names=c("Yp", "beta", "taue", "z"),
                          n.iter=iters,
                          #thin=thin,
                          progress.bar="none")
@@ -202,6 +234,16 @@ model_string4 <- textConnection("model{
   for(i in 1:np){
     Yp[i] ~ dnorm(inprod(Xp[i,], beta[idp[i],]), taue)
   }
+  
+  # Posterior preditive checks
+  for(i in 1:no){
+    Y2[i] ~ dnorm(inprod(Xo[i,], beta[ido[i],]), taue)
+  }
+  z[1] <- mean(Y2[])
+  z[2] <- min(Y2[])
+  z[3] <- max(Y2[])
+  z[4] <- max(Y2[])-min(Y2[])
+  z[5] <- sd(Y2[])
 }")
 
 data <- list(Yo=Yo, Xo=Xo, Xp=Xp, no=no, np=np, ido=ido, idp=idp, N=N,
@@ -210,7 +252,7 @@ model4   <- jags.model(model_string4,data = data,quiet=TRUE, n.chains=2)
 update(model4, burn, progress.bar="none")
 
 samples4 <- coda.samples(model4,
-                         variable.names=c("Yp", "beta", "taue"),
+                         variable.names=c("Yp", "beta", "taue", "z"),
                          n.iter=iters,
                          #thin=thin,
                          progress.bar="none")
@@ -274,3 +316,42 @@ for(j in 1:5){
          col=c("darkred", "burlywood4", "darkorange1", "darkgoldenrod1", "chartreuse4"),
          lty=1, lwd=2, inset=0.05)
 }
+
+##############################################################################
+#
+# Compute the Bayesian p-values
+#
+##############################################################################
+
+# Compute the test stats for the data
+samps0   <- c(mean(Y), min(Y), max(Y), max(Y)-min(Y), sd(Y))
+stat.names <- c("Mean Y", "Min Y", "Max Y", "Range Y", "Standard Deviation Y")
+
+# Compute the test stats for the models
+pval1 <- rep(0, 5)
+names(pval1) <- stat.names
+pval4 <- pval3 <- pval2 <- pval1
+
+for(j in 1:5){
+  plot(density(samps1[,ncol(samps1)-5+j]),
+       xlim = range(c(samps0[j], 
+                      samps1[,ncol(samps1)-5+j],
+                      samps2[,ncol(samps2)-5+j],
+                      samps3[,ncol(samps3)-5+j],
+                      samps4[,ncol(samps4)-5+j])),
+       xlab = "D",
+       ylab = "Posterior probability",
+       main = stat.names[j])
+  lines(density(samps2[,ncol(samps2)-5+j]), col=2)
+  lines(density(samps3[,ncol(samps3)-5+j]), col=3)
+  lines(density(samps4[,ncol(samps4)-5+j]), col=4)
+  abline(v=samps0[j], col=5)
+  legend("topleft", c("Model 1","Model 2","Model 3", "Model 4"),
+         lty=1, col=1:4, bty="n")
+  
+  pval1[j] <- mean(samps1[,ncol(samps1)-5+j] > samps0[j])
+  pval2[j] <- mean(samps2[,ncol(samps1)-5+j] > samps0[j])
+  pval3[j] <- mean(samps3[,ncol(samps1)-5+j] > samps0[j])
+  pval4[j] <- mean(samps4[,ncol(samps1)-5+j] > samps0[j])
+}
+
