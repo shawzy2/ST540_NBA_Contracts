@@ -1,0 +1,888 @@
+---
+title: "NBA Contract Modeling"
+author: "Matthew Perkins"
+date: "4/25/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir="~/NCSU/ST 540 spring 2022/final exam/Input")
+```
+
+```{r, warning=FALSE,message=FALSE}
+library(tidyverse)
+library(data.table)
+library(rjags)
+library(parallel)
+library(arm) # contains bayesglm function
+library(greta)
+library(coda)
+library(dummies)
+```
+
+# data prep
+
+loading the data with reduced number of variables
+```{r}
+train = fread('allSignificantPlayersRed.csv')
+train_rest = fread('lowGamesPlayersRed.csv')
+train = rbind(train, train_rest)
+head(train)
+train[,undrafted:=ifelse(undrafted, 1, 0)]
+train[,signSeason:=NULL]
+# form interaction terms
+train[,`:=`(GSandMP = GSPerSeason*WAMP,
+            MPandFG = WAFG*WAMP,
+            MPandPTS = WAMP*WAPTS,
+            rangePERandWS48 = rangePER*`rangeWS/48`,
+            FGand2P = WAFG*WA2P,
+            rangeFGand2P = range2P*rangeFG,
+            FGPercand2PPerc = `WAFG%`*`WA2P%`,
+            rangeFGPercand2PPerc = `range2P%`*`rangeFG%`,
+            PTSandFG = WAPTS*WAFG,
+            rangePTSandFG = rangePTS*rangeFG,
+            VORPandOWS = WAOWS*WAVORP,
+            rangeTSeFGandFG = `rangeTS%`*`rangeFG%`*`rangeeFG%`,
+            rangeeFGandFG = `rangeeFG%`*`rangeFG%`,
+            FGeFGTS = `WAFG%`*`WATS%`*`WAeFG%`)]
+# categorize the awards 
+train[,`:=`(allNBA1stTeam=ifelse(allNBA1stTeam>0, 1, 0),
+            allNBA2ndTeam=ifelse(allNBA2ndTeam>0, 1, 0),
+            allNBA3rdTeam=ifelse(allNBA3rdTeam>0, 1, 0),
+            allROOKIE1stTeam=ifelse(allROOKIE1stTeam>0,1,0),
+            allROOKIE2ndTeam=ifelse(allROOKIE2ndTeam>0, 1, 0),
+            allDEF1stTeam=ifelse(allDEF1stTeam>0,1,0),
+            allDEF2ndTeam=ifelse(allDEF2ndTeam>0,1,0),
+            allStar=ifelse(allStar>0, 1, 0),
+            scoreChamp=ifelse(scoreChamp>0, 1,0),
+            nbaChamp=ifelse(nbaChamp>0,1,0),
+            reboundChamp=ifelse(reboundChamp>0,1,0),
+            dpoy=ifelse(dpoy>0,1,0),
+            mip=ifelse(mip>0,1,0),
+            mvp=ifelse(mvp>0,1,0),
+            roy=ifelse(roy>0,1,0),
+            smoy=ifelse(smoy>0,1,0)
+            )]
+setorder(train, fullName, height, signYear, signAge)
+train[,`:=`(prev_contract = ifelse(fullName==lag(fullName,default='none'), lag(aav, default=0), 0),
+            prev_team = ifelse(fullName == lag(fullName, default='none'), lag(Tm, default='unknown'),'unknown'),
+            prev_signYear = ifelse(fullName == lag(fullName, default='none'), lag(signYear, default=2014),2014),
+            prev_signAge = ifelse(fullName == lag(fullName, default='none'), lag(signAge), signAge-1)
+            )]
+train[is.na(prev_signAge), prev_signAge:=signAge-1]
+train[,`:=`(changedTeam=ifelse((prev_team!=Tm) & (prev_team!='unknown') , 1, 0),
+            yearsOlder = signAge-prev_signAge,
+            prevRookieContract = ifelse((prev_contract==0) & ((signYear - draftYear)<=4), 1, 0))]
+test = train[signYear==2021,]
+train = train[(signYear!=2021),]
+train = as.data.table(dummies::dummy.data.frame(train,names='Tm'))
+test = as.data.table(dummies::dummy.data.frame(test, names='Tm'))
+train$prev_team = NULL
+test$prev_team = NULL
+col_add = colnames(train)[!(colnames(train)%in%colnames(test))]
+test[, col_add]=0
+test$TmTOT=NULL
+train$TmTOT=NULL
+train = train[,sort(colnames(train)), with=FALSE]
+test = test[,sort(colnames(test)), with=FALSE]
+team_names = colnames(train)[str_which(colnames(train), '^Tm')]
+stats_for_interaction_effect = c('WAPTS', 'rangePTS', 'WA2P', 'WA3P', 'range2P',
+                                 'range3P', 'WAAST', 'WADWS', 'WAOWS', 'WAPER',
+                                 'rangePER', 'WAUSG%', 'WAVORP', 'rangeVORP',
+                                 'rangeUSG%', 'WAMP', 'GSPerSeason')
+#for(i in team_names){
+#  for(j in stats_for_interaction_effect){
+#    col = str_c(i, 'and', j, sep='')
+#    train[,col]=train[,i, with=FALSE]*train[,j, with=FALSE]
+#    test[,col]=test[,i, with=FALSE]*test[,j, with=FALSE]
+#  }
+#}
+print(nrow(test))
+print(nrow(train))
+```
+
+
+
+
+there were 194 test points and 1218 rows for training.
+
+Creating a separate train and test set for players who didn't play in a minimum of 20 games per season as they generally will not get high contracts
+```{r}
+train3 = train[GPerSeason<20, ]
+test3 = test[GPerSeason<20,]
+train = train[GPerSeason>=20, ]
+test = test[GPerSeason>=20, ]
+```
+
+
+for this version we will perform logistic regression to differentiate between the rich contracts (aav>=10) and the not so rich contracts (aav<10).
+
+
+# logistic regression to predict if aav>=10 or aav<10
+
+
+```{r}
+# function that take the train and test data and creates vectors and 
+# matrices of the trained test data but with scaled predictors
+make_train_test_data = function(data, test_data, target, remove_cols=c(), scale=TRUE){
+  data = as.data.table(data)
+  test_data=as.data.table(test_data)
+  y = as.matrix(data[,..target])[,1]
+  yTest = as.matrix(test_data[,..target])[,1]
+  x = data[,-remove_cols, with=FALSE]
+  xTest = test_data[,-remove_cols, with=FALSE]
+  if(scale){
+      x = scale(x)
+      xTest = scale(xTest, attr(x, "scaled:center"), attr(x, "scaled:scale"))
+  }
+  return(list(y=y,yTest=yTest, x=x, xTest=xTest))
+}
+train[, groups:=ifelse(aav<10, 0, 1)]
+test[, groups:=ifelse(aav<10, 0, 1)]
+First_group = make_train_test_data(data=train,
+                                   test_data=test, target='groups',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups', 'Tm'),
+                                   )
+greta_x = as_data(First_group$x)
+nvar = ncol(greta_x)
+greta_x_test = as_data(First_group$xTest)
+greta_y = as_data(First_group$y)
+greta_y_test = as_data(First_group$yTest)
+int = normal(0, 1)
+tau = inverse_gamma(.1, .1)
+coef = laplace(0,1/sqrt(tau), dim=nvar)
+mu = int + greta_x%*%coef
+mup = int + greta_x_test%*%coef
+mu = ilogit(mu)
+mup = ilogit(mup)
+distribution(greta_y) = bernoulli(mu)
+m = model(coef, int)
+
+```
+
+```{r}
+draws = greta::mcmc(m, n_samples = 20000, n_cores=4, chains=2,
+                    warmup=10000, verbose=TRUE)
+effectiveSize(draws)
+```
+
+```{r}
+ypred = calculate(mup, values=draws, trace_batch_size = 250, nsim=1500)
+ypred = colMeans(ypred$mup)
+ypred = ifelse(ypred>.35, 1, 0)
+ypred = data.frame(pred=factor(ypred), obs=factor(First_group$yTest))
+caret::twoClassSummary(data=ypred,lev= c('0', '1'))
+caret::confusionMatrix(data=ypred$pred, reference=ypred$obs, positive='1')
+test$groups = ypred$pred
+ypred = calculate(mu, values=draws, trace_batch_size = 250, nsim=1000)
+ypred = colMeans(ypred$mu)
+ypred = ifelse(ypred>.35, 1, 0)
+ypred = data.frame(pred=factor(ypred), obs=factor(First_group$y))
+caret::twoClassSummary(data=ypred,lev= c('0', '1'))
+caret::confusionMatrix(data=ypred$pred, reference=ypred$obs, positive='1')
+train$groups = ypred$pred
+```
+
+
+
+
+
+
+
+
+there were 194 test points and 1218 rows for training.
+
+split the data into three groups based on the combination of total games and WAMP. I chose these because of their strong paired correlation with aav and because they are part of the predictors. It would be weird to base the groupings on aav since that would imply one already knows aav.
+```{r}
+#train$MPandGPS = train$GPerSeason*train$WAMP
+#lower_box = quantile(train$MPandGPS, .9 )
+#mid_box = quantile(train$MPandGPS, .45)
+#upper_box = quantile(train$MPandGPS, .75)
+#train[,groups:=ifelse(GPerSeason<20, 1, ifelse(GSPerSeason/GPerSeason<.6,2,3))]
+  
+                      #ifelse(MPandGPS>..upper_box, 2, 3))]
+#train$MPandGPS = NULL
+ggplot(train, aes(x=GSPerSeason, y = GPerSeason, size=aav, color=as.factor(groups)))+
+geom_point()
+```
+
+```{r split}
+# create the first group which is about the players in the upper quartile
+train1 = train[groups==1,]
+#MPandGPS = test$WAMP*test$GPerSeason
+#test$MPandGPS = MPandGPS
+#test[,groups:=ifelse(GPerSeason<20, 1, ifelse(GSPerSeason/GPerSeason<.6,2,3))]
+#test$MPandGPS=NULL
+test1 = test[groups==1, ]
+ggplot(test, aes(x=GSPerSeason, y = GPerSeason, size=aav, color=as.factor(groups)))+
+geom_point()
+```
+
+# regression model 1 for the players predicted to have aav>=10
+
+Now prep the data for greta
+```{r train_test}
+#train1$groups = as.numeric(train1$groups)
+#test1$groups = as.numeric(test1$groups)
+First_group = make_train_test_data(data=train1,
+                                   test_data=test1, target='aav',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups'
+                                                 ),
+                                   )
+
+```
+
+
+
+
+```{r regression1}
+# define spike slab prior like that from documentation 
+# https://rdrr.io/cran/greta/f/inst/examples/linear_spike_and_slab.Rmd
+nvar = ncol(First_group$x)
+spike_and_slab <- function (spikiness = 0.1, slabiness = 10, center=0, dim = NULL) {
+  stopifnot(spikiness < 1)
+  slab <- normal(center, slabiness, dim = dim)
+  spike <- laplace(center, spikiness, dim = dim)
+  spike * slab
+}
+min_max_transform = function(data, method=list(), predict=FALSE, inverse=FALSE, range=c(0,1), hard_max=NULL, hard_min=NULL){
+  if(inverse){
+    return((data-method$range[1])*(method$max_data-method$min_data)/(method$range[2]-method$range[1])+method$min_data)
+  }
+  if(predict){
+    return((method$range[2]-method$range[1])*(data-method$min_data)/(method$max_data-method$min_data) + method$range[1])
+  }
+  if(is.null(hard_min)){
+    
+    min_data=min(data)
+  }else{
+    min_data=hard_min
+  }
+  if(is.null(hard_max)){
+  max_data=max(data)
+  }else{
+    max_data=hard_max
+  }
+  data_transformed = (range[2]-range[1])*(data-min_data)/(max_data-min_data)+range[1]
+  return(list(transformed=data_transformed,
+              min_data=min_data,
+              max_data=max_data,
+              range=range))
+  
+}
+
+library(bestNormalize)
+#y_norm =bestNormalize(First_group$y)
+#y_normalized = y_norm$x.t
+y_norm1 = min_max_transform(data=First_group$y, hard_max = .45*112, hard_min = .0125)
+y_normalized = y_norm1$transformed
+# set priors for the coefficients, intercept, and standard deviation
+sigma = uniform(0,100)
+int = normal(0, 10)
+# define the expected value
+x = First_group$x
+if(any(is.na(x))){
+x[is.na(x)]=0
+}
+remove_cols = c()
+for(i in 1:ncol(x)){
+  if(length(unique(x[,i]))<=1){
+    remove_cols = c(remove_cols, i)
+  }
+}
+
+xTest =First_group$xTest
+if(!is.null(remove_cols) | length(remove_cols)>0){
+x = x[,-c(remove_cols)]
+xTest = xTest[,-c(remove_cols)]
+}
+greta_x = as_data(x)
+greta_y = as_data(y_normalized)
+nvar = ncol(x)
+tau = inverse_gamma(.1, .1)
+coef = laplace(0, 1/sqrt(tau), dim=nvar)
+mu = int + greta_x %*% coef
+# indicate likelihood distribution with turncated normal
+#max_trunc = predict(y_norm, newdata=.4*112)
+#min_trunc = predict(y_norm, newdata=.125)
+mu = ilogit(mu)
+distribution(greta_y) = gamma(sigma*mu, sigma*(1-mu))
+#yTest_normalized = predict(y_norm,
+#                                     newdata=First_group$yTest)
+yTest_normalized = min_max_transform(data=First_group$yTest,
+                                     method=y_norm1,
+                                     predict = TRUE)
+# set up the expected values for the test data set
+greta_y_test = as_data(yTest_normalized)
+greta_x_test = as_data(xTest)
+mup = int + greta_x_test %*% coef
+#mup=ilogit(mup)
+ex_mup = ilogit(mup)/(1-ilogit(mup))
+# make model
+m = model( coef, int, sigma, mu)
+```
+
+
+
+```{r}
+draws = greta::mcmc(m, n_samples = 20000, n_cores=4, chains=2,
+                    warmup=10000, verbose=TRUE)
+```
+
+```{r}
+effectiveSize(draws[[1]][,1:(ncol(x)+2)])
+```
+
+```{r}
+gelman.diag(draws)
+```
+
+```{r}
+geweke.diag(draws[[1]][,1:(ncol(x)+2)])
+```
+
+
+
+```{r, fig.height=30, fig.width=5}
+# sample of 30 trace plots
+library(bayesplot)
+mcmc_trace(draws[[1]][,1:30], facet_args = list(ncol=3))
+```
+
+
+
+```{r, fig.height=10, fig.width=5}
+
+mcmc_intervals(draws[[1]][,1:(ncol(x)+2)])
+```
+
+
+```{r,fig.height=40}
+mcmc_acf_bar(draws[[1]][,1:30])
+```
+
+
+
+calculating DIC and doing predicitions 
+
+```{r}
+results = summary(draws[[1]][,1:(ncol(x)+2)])
+results
+```
+
+```{r}
+intercept = results$statistics['int', 'Mean']
+shape = results$statistics['sigma' , 'Mean']
+```
+
+
+```{r}
+# get table of just quanitles for coefficients
+coefs = results$quantiles[1:(nrow(results$quantiles)-2), ]
+coefs = data.table(coefs, keep.rownames = TRUE)
+coefs[,significant:=ifelse((0 < `97.5%`)&(0>`2.5%`), 0, 1)]
+vars_keep = (coefs[significant==1,rn])
+vars_keep_bool = coefs$significant==1
+vars_names = colnames(First_group$x)[vars_keep_bool]
+vars_names
+```
+
+
+
+```{r start of results}
+ypred = calculate(ex_mup, values=draws, trace_batch_size = 250, nsim=1000)
+pred = colMeans(ypred$ex_mup)
+pred = min_max_transform(method=y_norm1, data=pred, inverse=TRUE)
+#pred = predict(y_norm, pred, inverse=TRUE)
+pred = ifelse(pred>.4*112, .4*112, pred)
+pred = data.frame(pred=pred, obs=First_group$yTest)
+caret::postResample(pred=pred, obs=First_group$yTest)
+```
+
+
+```{r}
+# make residuals 
+pred$residuals = (pred$obs-pred$pred)
+plot(pred$obs, pred$residuals)
+plot(pred$obs, pred$pred)
+
+
+```
+
+
+```{r}
+select_cols = colnames(draws[[1]])[str_detect(colnames(draws[[1]]), '^mu')]
+select_cols = c(select_cols, 'sigma')
+like = rbind(draws[[1]][,select_cols], draws[[2]][, select_cols])
+shape = like*like[,'sigma']
+shape = shape[, colnames(shape)!='sigma']
+rate = (1-like)*like[,'sigma']
+rate = rate[, colnames(rate)!='sigma']
+like = dgamma(y_normalized, shape, rate )
+# Combine samples from the two chains
+fbar   <- colMeans(like)
+Pw     <- sum(apply(log(like),2,var))
+WAIC   <- -2*sum(log(fbar))+2*Pw
+print('the WAIC is:')
+print(WAIC)
+```
+
+
+# regression model 2 for players predicted to have aav <10
+
+```{r regression2}
+test0 = test[groups==0, ]
+train0 = train[groups==0,]
+Second_group = make_train_test_data(data=train0,
+                                   test_data=test0, target='aav',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups', 'Tm'),
+                                   )
+
+
+#y_norm =bestNormalize(Second_group$y)
+#y_normalized = y_norm$x.t
+y_norm2 = min_max_transform(data=Second_group$y, hard_max = .45*112, hard_min = 0)
+y_normalized = y_norm2$transformed
+# set priors for the coefficients, intercept, and standard deviation
+sigma = uniform(0,100)
+int = normal(0, 10)
+# define the expected value
+x = Second_group$x
+if(any(is.na(x))){
+x[is.na(x)]=0
+}
+remove_cols = c()
+for(i in 1:ncol(x)){
+  if(length(unique(x[,i]))<=1){
+    remove_cols = c(remove_cols, i)
+  }
+}
+
+xTest =Second_group$xTest
+if(!is.null(remove_cols) | length(remove_cols)>0){
+x = x[,-c(remove_cols)]
+xTest = xTest[,-c(remove_cols)]
+}
+greta_x = as_data(x)
+greta_y = as_data(y_normalized)
+nvar = ncol(x)
+tau = inverse_gamma(.1, .1)
+coef = laplace(0, 1/sqrt(tau), dim=nvar)
+mu = int + greta_x %*% coef
+# indicate likelihood distribution with turncated normal
+#max_trunc = predict(y_norm, newdata=15)
+#min_trunc = predict(y_norm, newdata=0)
+mu = ilogit(mu)
+distribution(greta_y) = gamma(sigma*mu, sigma*(1-mu))# beta(sigma*mu, sigma*(1-mu))
+#yTest_normalized = predict(y_norm,
+#                                     newdata=Second_group$yTest)
+yTest_normalized = min_max_transform(data=Second_group$yTest,
+                                     method=y_norm2,
+                                     predict = TRUE)
+# set up the expected values for the test data set
+greta_y_test = as_data(yTest_normalized)
+greta_x_test = as_data(xTest)
+mup = int + greta_x_test %*% coef
+#mup=ilogit(mup)
+ex_mup = ilogit(mup)/(1-ilogit(mup))
+# make model
+m = model( coef, int, sigma, mu)
+```
+
+
+
+```{r model2}
+draws2 = greta::mcmc(m, n_samples = 20000, n_cores=4, chains=2,
+                    warmup=10000, verbose=TRUE)
+effectiveSize(draws2[[1]][,1:(ncol(x)+2)])
+```
+
+
+```{r, fig.height=15}
+mcmc_intervals(draws2[[1]][,1:(ncol(x)+2)])
+```
+
+
+```{r, fig.height=15, fig.width=5}
+mcmc_trace(draws2[[1]][,1:30], facet_args = list(ncol=3))
+```
+
+```{r}
+results = summary(draws2)
+```
+
+
+```{r}
+# get table of just quanitles for coefficients
+coefs = results$quantiles[1:(nrow(results$quantiles)-2), ]
+coefs = data.table(coefs, keep.rownames = TRUE)
+coefs[,significant:=ifelse((0 < `97.5%`)&(0>`2.5%`), 0, 1)]
+vars_keep = (coefs[significant==1,rn])
+vars_keep_bool = coefs$significant==1
+vars_names = colnames(First_group$x)[vars_keep_bool]
+vars_names
+```
+
+
+
+```{r}
+# get predictionss
+ypred2 = calculate(ex_mup, values=draws2, trace_batch_size = 250, nsim=1000)
+pred2 = colMeans(ypred2$ex_mup)
+#pred2 = predict(y_norm, pred2, inverse=TRUE)
+pred2 = min_max_transform(method = y_norm2, data=pred2, inverse=TRUE)
+pred2 = ifelse(pred2>.4*112, .4*112, pred2)
+pred2 = data.frame(pred=pred2, obs=Second_group$yTest)
+caret::postResample(pred=pred2, obs=Second_group$yTest)
+```
+
+
+```{r}
+# make residuals 
+pred2$residuals = (pred2$obs-pred2$pred)
+#ypred2 = ypred[ypred$obs<10,]
+plot(pred2$obs, pred2$residuals)
+plot(pred2$obs, pred2$pred)
+#caret::postResample(pred=ypred2$pred, ypred2$obs)
+
+```
+
+```{r}
+select_cols = colnames(draws[[1]])[str_detect(colnames(draws[[1]]), '^mu')]
+select_cols = c(select_cols, 'sigma')
+like = rbind(draws[[1]][,select_cols], draws[[2]][, select_cols])
+shape = like*like[,'sigma']
+shape = shape[, colnames(shape)!='sigma']
+rate = (1-like)*like[,'sigma']
+rate = rate[, colnames(rate)!='sigma']
+like = dgamma(y_normalized, shape, rate )
+# Combine samples from the two chains
+fbar   <- colMeans(like)
+Pw     <- sum(apply(log(like),2,var))
+WAIC   <- -2*sum(log(fbar))+2*Pw
+print('the WAIC is:')
+print(WAIC)
+```
+
+# regression model 3 for the less than 20 games per players season
+
+```{r model3 prep}
+third_group = make_train_test_data(data=train3,
+                                   test_data=test3, target='aav',
+                                   remove_cols=c('totalValue', 'aav',
+                                                 'fullName','termSecondYear',
+                                                 'termFirstYear', 'groups',
+                                                 'Tm'),
+                                   )
+y_norm3 =bestNormalize(third_group$y)
+y_normalized = y_norm3$x.t
+# set priors for the coefficients, intercept, the multiplicative constants 
+# in the beta 
+
+# define the expected value
+third_group$x[is.na(third_group$x)]=0
+third_group$xTest[is.na(third_group$xTest)]=0
+cols_to_remove = c()
+for(i in 1:ncol(third_group$x)){
+  if(length(unique(third_group$x[, i]))<=1){
+    cols_to_remove =c(cols_to_remove ,colnames(third_group$x)[i])
+     
+  }
+}
+for( i in cols_to_remove){
+third_group$x = third_group$x[, colnames(third_group$x)!=i]
+third_group$xTest = third_group$xTest[, colnames(third_group$xTest)!=i]
+}
+nvar = ncol(third_group$x)
+sigma = inverse_gamma(.01, .01)
+int = normal(0, 10)
+tau = inverse_gamma(.1, .1)
+coef = laplace(0, 1/sqrt(tau), dim=nvar)
+greta_x = as_data(third_group$x)
+greta_y = as_data(y_normalized)
+mu = int + greta_x %*% coef
+# indicated likelihood distribution
+#max_trunc = predict(y_norm, newdata=.5*112)
+#min_trunc = predict(y_norm, newdata=.125)
+distribution(greta_y) = normal(mu, sigma)
+yTest_normalized = predict(y_norm3, newdata=third_group$yTest)
+greta_y_test = as_data(yTest_normalized)
+greta_x_test = as_data(third_group$xTest)
+mup = int + greta_x_test %*% coef
+
+# make model
+m = model( coef, int, sigma, mu)
+```
+
+
+
+
+```{r model3}
+draws3 = greta::mcmc(m, n_samples = 30000, n_cores=4, chains=2,
+                    warmup=15000, verbose=TRUE)
+effectiveSize(draws3[[1]][,1:(ncol(x)+2)])
+```
+
+
+```{r, fig.height=15}
+mcmc_intervals(draws3[[1]][,1:(ncol(x)+2)])
+```
+
+
+```{r, fig.height=15, fig.width=5}
+mcmc_trace(draws3[[1]][,1:30], facet_args = list(ncol=3))
+```
+
+```{r}
+results = summary(draws3)
+```
+
+
+```{r}
+# get table of just quanitles for coefficients
+coefs = results$quantiles[1:(nrow(results$quantiles)-2), ]
+coefs = data.table(coefs, keep.rownames = TRUE)
+coefs[,significant:=ifelse((0 < `97.5%`)&(0>`2.5%`), 0, 1)]
+vars_keep = (coefs[significant==1,rn])
+vars_keep_bool = coefs$significant==1
+vars_names = colnames(First_group$x)[vars_keep_bool]
+vars_names
+```
+
+
+
+```{r}
+# get predictionss
+ypred3 = calculate(mup, values=draws3, trace_batch_size = 250, nsim=1000)
+pred3 = colMeans(ypred3$mup)
+pred3 = predict(y_norm3, pred3, inverse=TRUE)
+pred3 = data.frame(pred=pred3, obs=third_group$yTest)
+caret::postResample(pred=pred3, obs=third_group$yTest)
+```
+
+
+```{r}
+# make residuals 
+pred3$residuals = (pred3$obs-pred3$pred)
+#ypred2 = ypred[ypred$obs<10,]
+plot(pred3$obs, pred3$residuals)
+plot(pred3$obs, pred3$pred)
+#caret::postResample(pred=ypred2$pred, ypred2$obs)
+
+```
+
+```{r}
+select_cols = colnames(draws[[1]])[str_detect(colnames(draws[[1]]), '^mu')]
+select_cols = c(select_cols, 'sigma')
+like = rbind(draws[[1]][,select_cols], draws[[2]][, select_cols])
+like = dnorm(y_normalized,
+             like[,colnames(like)!='sigma'],
+             like[,colnames(like)=='sigma'])
+like = like[, colnames(like)!='sigma']
+# Combine samples from the two chains
+fbar   <- colMeans(like)
+Pw     <- sum(apply(log(like),2,var))
+WAIC   <- -2*sum(log(fbar))+2*Pw
+print('the WAIC is:')
+print(WAIC)
+```
+
+
+```{r}
+pred_total = rbind(pred, pred2, pred3)
+pred_total = unique(pred_total)
+caret::postResample(pred_total$pred, pred_total$obs)
+```
+
+
+```{r}
+plot(pred_total$obs, pred_total$residuals )
+plot(pred_total$obs, pred_total$pred)
+```
+
+
+
+# posterior predictive checks for each regression model
+posterior predictive checks will be done for the max of y, min of y, Standard deviation of y, kurtosis of y and finally the median of y
+
+First is for model 1 
+
+```{r}
+library(moments)
+# calculate each metric per row and then inverse it 
+rowmins = apply(ypred$ex_mup,1, min)
+rowmins = min_max_transform(method=y_norm1, data=rowmins, inverse=TRUE)
+rowmaxes = apply(ypred$ex_mup, 1, max)
+rowmaxes = min_max_transform(method=y_norm1, data=rowmaxes, inverse=TRUE)
+rowSigmas=tryCatch({
+ apply(ypred$ex_mup, 1, FUN=sd)
+  
+},
+error=function(e){
+  rm(sd)
+  apply(ypred$ex_mup, 1, FUN=sd)
+}
+)
+rowSigmas = min_max_transform(method=y_norm1, data=rowSigmas, inverse=TRUE)
+rowKurtosis = apply(ypred$ex_mup, 1, kurtosis)
+rowMedians = apply(ypred$ex_mup, 1, median)
+rowMedians = min_max_transform(method=y_norm1, data=rowMedians, inverse=TRUE)
+```
+
+
+
+
+```{r}
+ggplot(as.data.frame(x=rowmins), aes(x=rowmins))+
+  geom_density()+
+  geom_vline(aes(xintercept=min(test1$aav)), color='red')+
+  xlab('min aav')+
+  labs(title='PPD of min aav compared to actual min aav')
+
+ggplot(as.data.frame(x=rowmaxes), aes(x=rowmaxes))+
+  geom_density()+
+  geom_vline(aes(xintercept=max(test1$aav)), color='red')+
+  xlab('max aav')+
+  labs(title='PPD of max aav compared to actual max aav')
+ggplot(as.data.frame(x=rowSigmas), aes(x=rowSigmas))+
+  geom_density()+
+  geom_vline(aes(xintercept=sd(test1$aav)), color='red')+
+  xlab('standard deviation aav')+
+  labs(title='PPD of standard deviation of aav compared to actual standard deviation aav')
+ggplot(as.data.frame(x=rowKurtosis), aes(x=rowKurtosis))+
+  geom_density()+
+  geom_vline(aes(xintercept=kurtosis(test1$aav)), color='red')+
+  xlab('Kurtosis aav')+
+  labs(title='PPD of kurtosis of aav compared to actual kurtosis of aav')
+ggplot(as.data.frame(x=rowMedians), aes(x=rowMedians))+
+  geom_density()+
+  geom_vline(aes(xintercept=median(test1$aav)), color='red')+
+  xlab('median aav')+
+  labs(title='PPD of median aav compared to actual median aav')
+```
+For model 2
+
+```{r}
+rowmins = apply(ypred$ex_mup,1, min)
+rowmins = min_max_transform(method=y_norm2, data=rowmins, inverse=TRUE)
+rowmaxes = apply(ypred$ex_mup, 1, max)
+rowmaxes = min_max_transform(method=y_norm2, data=rowmaxes, inverse=TRUE)
+rowSigmas=tryCatch({
+ apply(ypred$ex_mup, 1, FUN=sd)
+  
+},
+error=function(e){
+  rm(sd)
+  apply(ypred$ex_mup, 1, FUN=sd)
+}
+)
+rowSigmas = min_max_transform(method=y_norm2, data=rowSigmas, inverse=TRUE)
+rowKurtosis = apply(ypred$ex_mup, 1, kurtosis)
+rowMedians = apply(ypred$ex_mup, 1, median)
+rowMedians = min_max_transform(method=y_norm2, data=rowMedians, inverse=TRUE)
+```
+
+
+
+
+```{r}
+ggplot(as.data.frame(x=rowmins), aes(x=rowmins))+
+  geom_density()+
+  geom_vline(aes(xintercept=min(test0$aav)), color='red')+
+  xlab('min aav')+
+  labs(title='PPD of min aav compared to actual min aav')
+
+ggplot(as.data.frame(x=rowmaxes), aes(x=rowmaxes))+
+  geom_density()+
+  geom_vline(aes(xintercept=max(test0$aav)), color='red')+
+  xlab('max aav')+
+  labs(title='PPD of max aav compared to actual max aav')
+ggplot(as.data.frame(x=rowSigmas), aes(x=rowSigmas))+
+  geom_density()+
+  geom_vline(aes(xintercept=sd(test0$aav)), color='red')+
+  xlab('standard deviation aav')+
+  labs(title='PPD of standard deviation of aav compared to actual standard deviation aav')
+ggplot(as.data.frame(x=rowKurtosis), aes(x=rowKurtosis))+
+  geom_density()+
+  geom_vline(aes(xintercept=kurtosis(test0$aav)), color='red')+
+  xlab('Kurtosis aav')+
+  labs(title='PPD of kurtosis of aav compared to actual kurtosis of aav')
+ggplot(as.data.frame(x=rowMedians), aes(x=rowMedians))+
+  geom_density()+
+  geom_vline(aes(xintercept=median(test0$aav)), color='red')+
+  xlab('median aav')+
+  labs(title='PPD of median aav compared to actual median aav')
+```
+
+
+
+for model 3
+```{r}
+rowmins = apply(ypred$ex_mup,1, min)
+rowmins = predict(method=y_norm3, newdata=rowmins, inverse=TRUE)
+rowmaxes = apply(ypred$ex_mup, 1, max)
+rowmaxes = predict(y_norm3, newdata=rowmaxes, inverse=TRUE)
+rowSigmas=tryCatch({
+ apply(ypred$ex_mup, 1, FUN=sd)
+  
+},
+error=function(e){
+  rm(sd)
+  apply(ypred$ex_mup, 1, FUN=sd)
+}
+)
+rowSigmas = predict(y_norm3, newdata=rowSigmas, inverse=TRUE)
+rowKurtosis = apply(ypred$ex_mup, 1, kurtosis)
+rowMedians = apply(ypred$ex_mup, 1, median)
+rowMedians = predict(y_norm3, newdata=rowMedians, inverse=TRUE)
+```
+
+
+
+
+```{r}
+ggplot(as.data.frame(x=rowmins), aes(x=rowmins))+
+  geom_density()+
+  geom_vline(aes(xintercept=min(test3$aav)), color='red')+
+  xlab('min aav')+
+  labs(title='PPD of min aav compared to actual min aav')
+
+ggplot(as.data.frame(x=rowmaxes), aes(x=rowmaxes))+
+  geom_density()+
+  geom_vline(aes(xintercept=max(test3$aav)), color='red')+
+  xlab('max aav')+
+  labs(title='PPD of max aav compared to actual max aav')
+ggplot(as.data.frame(x=rowSigmas), aes(x=rowSigmas))+
+  geom_density()+
+  geom_vline(aes(xintercept=sd(test3$aav)), color='red')+
+  xlab('standard deviation aav')+
+  labs(title='PPD of standard deviation of aav compared to actual standard deviation aav')
+ggplot(as.data.frame(x=rowKurtosis), aes(x=rowKurtosis))+
+  geom_density()+
+  geom_vline(aes(xintercept=kurtosis(test3$aav)), color='red')+
+  xlab('Kurtosis aav')+
+  labs(title='PPD of kurtosis of aav compared to actual kurtosis of aav')
+ggplot(as.data.frame(x=rowMedians), aes(x=rowMedians))+
+  geom_density()+
+  geom_vline(aes(xintercept=median(test3$aav)), color='red')+
+  xlab('median aav')+
+  labs(title='PPD of median aav compared to actual median aav')
+```
+
+
+
+
+
+
+
+
+
+
+
